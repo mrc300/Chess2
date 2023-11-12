@@ -19,7 +19,12 @@ public class Game : MonoBehaviour
     }
 
     void Update(){
-        
+            if(Input.GetMouseButton(0)) {
+                var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                mouseWorldPos.z = 0f; // zero z
+                Vector3 offsetWorldPos = (mouseWorldPos+ new Vector3(36.04f,36.04f,0))/9;
+                Debug.Log($"{(int)(offsetWorldPos.x)} , {(int)(offsetWorldPos.y)}");
+            }
     }
 
     void createBoard(){
