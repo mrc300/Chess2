@@ -53,10 +53,10 @@ using static moves;
 
         public coordinates[] movePlate(piece p){
             if(p.getName() == "white_pawn"){
-                return moves.movePawn(this,p.coordinates);
+                return moves.movePawn(this,p.coordinates,0);
             }
             if(p.getName()== "black_pawn"){
-                return moves.movePawn(this,p.coordinates);
+                return moves.movePawn(this,p.coordinates,1);
             }
             return null;
         

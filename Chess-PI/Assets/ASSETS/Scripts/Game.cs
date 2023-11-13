@@ -37,6 +37,8 @@ public class Game : MonoBehaviour
                       if(offsetWorldPos.inVector(previousValidMoves)){
                         print("peça movida");
                         movePiece(previousPiece.coordinates,offsetWorldPos,previousPiece);
+                         previousValidMoves = null; 
+                         previousPiece = null;    
                       }
                     }
                     if(clickedPiece.getName()!= "null"){
@@ -91,8 +93,7 @@ public class Game : MonoBehaviour
 
     void removeMovePlates() {
     foreach (GameObject movePlate in GameObject.FindGameObjectsWithTag("movePlate"))
-    {   
-        
+    {    
         Destroy(movePlate);
     }
 }
