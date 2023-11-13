@@ -1,34 +1,60 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using static coordinates;
 using static Board;
-
+using static piece;
+using UnityEngine.UIElements;
+using Unity.VisualScripting;
 public class Game : MonoBehaviour
 {
-    public GameObject black_pawn, black_queen, black_king, black_hourse, black_rook, black_bishop, white_pawn, white_queen, white_king, white_hourse, white_rook, white_bishop,lightTile, brownTile;
+    public GameObject black_pawn, black_queen, black_king, black_hourse, black_rook, black_bishop, white_pawn, white_queen, white_king, white_hourse, white_rook, white_bishop,lightTile, brownTile,movePlate,Null;
 
-    public GameObject [,] squares = new GameObject[8,8];
-   
+    
     public Board board = new Board();
     private Vector3 iBoard = new Vector3(-31.53f,-31.53f,0);
 
+    private piece previousPiece;
+    private coordinates[] previousValidMoves;
+    private Vector3 previousUnityCoords;
     void Start()
     {
         createBoard();
+        
     }
 
     void Update(){
             if(Input.GetMouseButton(0)) {
                 var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 mouseWorldPos.z = 0f; // zero z
-                Vector3 offsetWorldPos = (mouseWorldPos+ new Vector3(36.04f,36.04f,0))/9;
+                coordinates offsetWorldPos = new coordinates().setBoardCoordinates(mouseWorldPos);
+                if(board.insideBoard(offsetWorldPos)){
                 Debug.Log($"{(int)(offsetWorldPos.x)} , {(int)(offsetWorldPos.y)}");
+                piece clickedPiece = board.getPiece(offsetWorldPos.x, offsetWorldPos.y);
+                if(clickedPiece != null){
+                     if (previousPiece != null && !(previousPiece.equals(clickedPiece))){
+                      removeMovePlates();
+                      if(offsetWorldPos.inVector(previousValidMoves)){
+                        print("peça movida");
+                        movePiece(previousPiece.coordinates,offsetWorldPos,previousPiece);
+                      }
+                    }
+                    if(clickedPiece.getName()!= "null"){
+                    coordinates[] validMoves = board.movePlate(clickedPiece);
+            
+                    createmovePlate(validMoves, offsetWorldPos);
+                    Debug.Log($"{validMoves[0].x} , {validMoves[0].y}");
+                    previousValidMoves = validMoves; 
+                    previousPiece = clickedPiece;     
+                    }             
+                }
+                previousUnityCoords= mouseWorldPos;
             }
+            }
+
     }
 
     void createBoard(){
-        
         for(int x=0; x<8; x++){
             for(int y=0; y<8; y++){
                 if((x+y)%2== 0) {
@@ -40,40 +66,98 @@ public class Game : MonoBehaviour
         }
         for(int x=0; x<8; x++){
             for(int y=0; y<8; y++){
-                GameObject cur = getSprite(board.getPiece(x,y));
-                if(cur != null)
-                    Instantiate(cur, iBoard + new Vector3(x*(9.01f),y*(9.01f),-2), Quaternion.identity);
+                GameObject cur = getSprite(board.getPiece(x,y).getName());
+                if(cur != null){
+                   GameObject aux= Instantiate(cur, iBoard + new Vector3(x*(9.01f),y*(9.01f),-2), Quaternion.identity);
+                   aux.tag="Piece";
+                }
             }
         }
     }
 
-    public GameObject getSprite(int i){
-            switch(i){
-                case 1:
+    void createmovePlate(coordinates[] coordenadas,coordinates current){
+        removeMovePlates();
+        if(coordenadas!=null){
+        GameObject aux = Instantiate(movePlate, iBoard + new Vector3(current.x*(9.01f),current.y*(9.01f),-2), Quaternion.identity);
+         aux.tag = "movePlate";
+        for(int i=0; i<coordenadas.Length; i++){
+             GameObject cur = getSprite("movePlate");
+             GameObject movePlate = Instantiate(cur, iBoard + new Vector3(coordenadas[i].x*(9.01f),coordenadas[i].y*(9.01f),-2), Quaternion.identity);
+             movePlate.tag = "movePlate";
+            
+        }
+        }
+    }
+
+    void removeMovePlates() {
+    foreach (GameObject movePlate in GameObject.FindGameObjectsWithTag("movePlate"))
+    {   
+        
+        Destroy(movePlate);
+    }
+}
+
+
+    void movePiece(coordinates previousCoordinate,coordinates newCoordinate, piece piece){
+            board.move(previousCoordinate,newCoordinate,piece);
+            removePieces();
+            for(int x=0; x<8; x++){
+            for(int y=0; y<8; y++){
+                GameObject cur = getSprite(board.getPiece(x,y).getName());
+                if(cur != null && board.getPiece(x,y).getName()!= "null"){
+                    Instantiate(cur, iBoard + new Vector3(x*(9.01f),y*(9.01f),-2), Quaternion.identity);
+                }
+            }
+        }
+    }
+
+
+
+
+
+    public GameObject getSprite(string name){
+            switch(name){
+                case "white_pawn":
                     return white_pawn;
-                case 2:
+                case "white_bishop":
                     return white_bishop;
-                case 3:
+                case "white_hourse":
                     return white_hourse;
-                case 4:
+                case "white_rook":
                     return white_rook;
-                case 5:
+                case "white_queen":
                     return white_queen;
-                case 6:
+                case "white_king":
                     return white_king;
-                case -1:
+                case "black_pawn":
                     return black_pawn;
-                case -2:
+                case "black_bishop":
                     return black_bishop;
-                case -3:
+                case "black_hourse":
                     return black_hourse;
-                case -4:
+                case "black_rook":
                     return black_rook;
-                case -5:
+                case "black_queen":
                     return black_queen;
-                case -6:
+                case "black_king":
                     return black_king;
+                case "movePlate":
+                    return movePlate;
+                case "null":
+                    return Null;
             }
             return null;
         }
+
+
+
+void removePieces()
+{
+    foreach (GameObject pieceObject in GameObject.FindGameObjectsWithTag("Piece"))
+    {
+        Destroy(pieceObject);
+    }
+}
+
+
 }

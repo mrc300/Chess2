@@ -273,6 +273,7 @@ MonoBehaviour:
   white_bishop: {fileID: 7947659872613818169, guid: 3b80ff491ebd5354a97eeb97297af3a7, type: 3}
   lightTile: {fileID: 4318257151260163248, guid: 909078465aa829442afb75cf98c5e861, type: 3}
   brownTile: {fileID: 3958577279938385857, guid: a2cb60ac339a45a478ba4d90ebc6f477, type: 3}
+  movePlate: {fileID: 3662862999205266325, guid: b61795f5e92f80d4780de60dd705d2df, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
