@@ -32,6 +32,8 @@ public class coordinates {
         this.x =x;
         this.y=y;
     }
+
+
     public bool inVector (coordinates[] coordinates){
             for(int i=0; i<coordinates.Length;i++){
                 if(this.x== coordinates[i].x && this.y== coordinates[i].y){

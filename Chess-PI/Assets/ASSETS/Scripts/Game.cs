@@ -106,7 +106,8 @@ public class Game : MonoBehaviour
             for(int y=0; y<8; y++){
                 GameObject cur = getSprite(board.getPiece(x,y).getName());
                 if(cur != null && board.getPiece(x,y).getName()!= "null"){
-                    Instantiate(cur, iBoard + new Vector3(x*(9.01f),y*(9.01f),-2), Quaternion.identity);
+                    GameObject nObj = Instantiate(cur, iBoard + new Vector3(x*(9.01f),y*(9.01f),-2), Quaternion.identity);
+                    nObj.tag = "Piece";
                 }
             }
         }
