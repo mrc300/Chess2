@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using System.Data.Common;
 using UnityEditorInternal;
 using UnityEngine;
-using static coordinates;
-public class piece 
+using static Coordinates;
+public class Piece 
 {
-    private string name;
-    public coordinates coordinates;
+    private string name,color;
+    public Coordinates coordinates;
 
     
-    public piece (int x, int y){
+    public Piece (int x, int y){
         this.name= "null";
-        this.coordinates = new coordinates(x,y);
+        this.color = "null";
+        this.coordinates = new Coordinates(x,y);
     }
-    public piece (string name, int x, int y){
+
+    public Piece (string name, int x, int y){
         this.name = name;
-        this.coordinates= new coordinates(x,y);
+        this.color = name.Split("_")[0];
+        this.coordinates= new Coordinates(x,y);
     }
     public string getName(){
        return name;
@@ -26,10 +29,12 @@ public class piece
         this.name= name;
     }
    
+   public string getColor(){
+        return color;
+   }
 
-   public bool equals(piece piece){
-        return this.name.Equals(piece.getName()) && this.coordinates.x == piece.coordinates.x &&
-            this.coordinates.y == piece.coordinates.y; 
+   public bool equals(Piece piece){
+        return this == piece;
    }
   
 }
