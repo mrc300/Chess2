@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static coordinates;
+using static Coordinates;
 using static Board;
-using static piece;
+using static Piece;
 using UnityEngine.UIElements;
 using Unity.VisualScripting;
 public class Game : MonoBehaviour
@@ -14,8 +14,8 @@ public class Game : MonoBehaviour
     public Board board = new Board();
     private Vector3 iBoard = new Vector3(-31.53f,-31.53f,0);
 
-    private piece previousPiece;
-    private coordinates[] previousValidMoves;
+    private Piece previousPiece;
+    private List<Coordinates> previousValidMoves = new List<Coordinates>();
     private Vector3 previousUnityCoords;
     void Start()
     {
@@ -24,30 +24,28 @@ public class Game : MonoBehaviour
     }
 
     void Update(){
-            if(Input.GetMouseButton(0)) {
+            if(Input.GetMouseButtonDown(0)) {
                 var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 mouseWorldPos.z = 0f; // zero z
-                coordinates offsetWorldPos = new coordinates().setBoardCoordinates(mouseWorldPos);
-                if(board.insideBoard(offsetWorldPos)){
-                Debug.Log($"{(int)(offsetWorldPos.x)} , {(int)(offsetWorldPos.y)}");
-                piece clickedPiece = board.getPiece(offsetWorldPos.x, offsetWorldPos.y);
-                if(clickedPiece != null){
-                     if (previousPiece != null && !(previousPiece.equals(clickedPiece))){
-                      removeMovePlates();
-                      if(offsetWorldPos.inVector(previousValidMoves)){
-                        print("peça movida");
-                        movePiece(previousPiece.coordinates,offsetWorldPos,previousPiece);
-                         previousValidMoves = null; 
-                         previousPiece = null;    
-                      }
-                    }
-                    if(clickedPiece.getName()!= "null"){
-                    coordinates[] validMoves = board.movePlate(clickedPiece);
-            
-                    createmovePlate(validMoves, offsetWorldPos);
-                    Debug.Log($"{validMoves[0].x} , {validMoves[0].y}");
-                    previousValidMoves = validMoves; 
-                    previousPiece = clickedPiece;     
+                Coordinates offsetWorldPos = new Coordinates(mouseWorldPos);
+                if(offsetWorldPos.insideBoard()){
+                //Debug.Log($"{(int)(offsetWorldPos.x)} , {(int)(offsetWorldPos.y)}");
+                Piece clickedPiece = board.getPiece(offsetWorldPos.x, offsetWorldPos.y);
+                if(clickedPiece.getName() != "null" || previousPiece != null){
+                    if (previousPiece != null && !(previousPiece.equals(clickedPiece))){
+                        removeMovePlates();
+                        if(offsetWorldPos.inVector(previousValidMoves)){
+                            print("peça movida");
+                            movePiece(previousPiece.coordinates,offsetWorldPos,previousPiece);
+                            
+                        }
+                        previousValidMoves = null; 
+                        previousPiece = null;
+                    } else {
+                        List<Coordinates> validMoves = board.movePlate(clickedPiece);
+                        createmovePlate(validMoves, offsetWorldPos);
+                        previousValidMoves = validMoves;
+                        previousPiece = clickedPiece;
                     }             
                 }
                 previousUnityCoords= mouseWorldPos;
@@ -77,12 +75,12 @@ public class Game : MonoBehaviour
         }
     }
 
-    void createmovePlate(coordinates[] coordenadas,coordinates current){
+    void createmovePlate(List<Coordinates> coordenadas,Coordinates current){
         removeMovePlates();
         if(coordenadas!=null){
         GameObject aux = Instantiate(movePlate, iBoard + new Vector3(current.x*(9.01f),current.y*(9.01f),-2), Quaternion.identity);
          aux.tag = "movePlate";
-        for(int i=0; i<coordenadas.Length; i++){
+        for(int i=0; i<coordenadas.Count; i++){
              GameObject cur = getSprite("movePlate");
              GameObject movePlate = Instantiate(cur, iBoard + new Vector3(coordenadas[i].x*(9.01f),coordenadas[i].y*(9.01f),-2), Quaternion.identity);
              movePlate.tag = "movePlate";
@@ -99,14 +97,15 @@ public class Game : MonoBehaviour
 }
 
 
-    void movePiece(coordinates previousCoordinate,coordinates newCoordinate, piece piece){
-            board.move(previousCoordinate,newCoordinate,piece);
+    void movePiece(Coordinates previousCoordinate,Coordinates newCoordinate, Piece Piece){
+            board.move(previousCoordinate,newCoordinate,Piece);
             removePieces();
             for(int x=0; x<8; x++){
             for(int y=0; y<8; y++){
                 GameObject cur = getSprite(board.getPiece(x,y).getName());
                 if(cur != null && board.getPiece(x,y).getName()!= "null"){
-                    Instantiate(cur, iBoard + new Vector3(x*(9.01f),y*(9.01f),-2), Quaternion.identity);
+                    GameObject nObj = Instantiate(cur, iBoard + new Vector3(x*(9.01f),y*(9.01f),-2), Quaternion.identity);
+                    nObj.tag = "Piece";
                 }
             }
         }
@@ -154,9 +153,9 @@ public class Game : MonoBehaviour
 
 void removePieces()
 {
-    foreach (GameObject pieceObject in GameObject.FindGameObjectsWithTag("Piece"))
+    foreach (GameObject PieceObject in GameObject.FindGameObjectsWithTag("Piece"))
     {
-        Destroy(pieceObject);
+        Destroy(PieceObject);
     }
 }
 

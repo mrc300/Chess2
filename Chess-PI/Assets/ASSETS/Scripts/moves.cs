@@ -3,23 +3,77 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 using static Board;
-using static coordinates;
-public class moves 
+using static Coordinates;
+public class Moves 
 {
-   public static coordinates[] movePawn(Board board,  coordinates coordinates, int color){
-      if(color==0){
-            coordinates newCoordinates = new coordinates(coordinates.x, coordinates.y + 1);
-            coordinates[] result = {newCoordinates};
-            return result;
-      } else {
-            coordinates newCoordinates = new coordinates(coordinates.x, coordinates.y - 1);
-            coordinates[] result = {newCoordinates};
+      public static List<Coordinates> movePawn(Board board,  Coordinates coordinates, int color){
+            List<Coordinates> result = new List<Coordinates>();
+            Piece piece =board.getPiece(coordinates);
+
+            if(color==0)
+            {     Coordinates newCoordinates =new Coordinates(coordinates.x, coordinates.y + 1);
+                   Coordinates right= new Coordinates(newCoordinates.x+1,newCoordinates.y);
+                        Coordinates left= new Coordinates(newCoordinates.x-1,newCoordinates.y);
+
+                        if((left.insideBoard() && board.getPiece(left).getColor() =="black")){
+                              result.Add(left);
+                        }
+                        if((right.insideBoard() && board.getPiece(right).getColor() =="black")){
+                              result.Add(right);
+                        }
+                  if(board.getPiece(newCoordinates).getName() == "null"){
+                        result.Add(newCoordinates);
+                       
+                  } else {
+                        return result;
+                  }
+                  if(piece.hasMoved == false){
+                        newCoordinates =new Coordinates(coordinates.x, coordinates.y + 2);
+                        if(board.getPiece(newCoordinates).getName() == "null"){
+                              result.Add(newCoordinates);
+                        }
+                  }
+            } else {
+                  Coordinates newCoordinates =new Coordinates(coordinates.x, coordinates.y - 1);
+                   Coordinates right= new Coordinates(newCoordinates.x+1,newCoordinates.y);
+                  Coordinates left= new Coordinates(newCoordinates.x-1,newCoordinates.y);
+
+                        if((left.insideBoard() && board.getPiece(left).getColor() =="white")){
+                              result.Add(left);
+                        }
+                        if((right.insideBoard() && board.getPiece(right).getColor() =="white")){
+                              result.Add(right);
+                        }
+                  if(board.getPiece(newCoordinates).getName() == "null"){
+                        result.Add(newCoordinates);
+                  } else {
+                        return result;
+                  }
+                  if(piece.hasMoved == false){
+                        newCoordinates =new Coordinates(coordinates.x, coordinates.y - 2);
+                        if(board.getPiece(newCoordinates).getName() == "null"){
+                              result.Add(newCoordinates);
+                        }
+                  }
+            }
             return result;
       }
-      
-   }
 
-
-   
-
+      public static List<Coordinates> moveLine(Board board,  Coordinates coordinates, int dx, int dy,int range){
+            List<Coordinates> result = new List<Coordinates>();
+            board.print();
+            for(int i = 1;i<=range;i++){
+                  Coordinates nCoordinates = new Coordinates(coordinates.x+dx*i, coordinates.y+dy*i);
+                  if(!nCoordinates.insideBoard()) break;
+                  else if(board.getPiece(nCoordinates).getName() != "null"){
+                        if(board.getPiece(nCoordinates).getColor() != board.getPiece(coordinates).getColor())result.Add(nCoordinates);
+                        break;
+                  } 
+                  else{
+                        Debug.Log($"{nCoordinates.x}, {nCoordinates.y}");
+                        result.Add(nCoordinates);
+                  }
+            }
+            return result;
+      }
 }
