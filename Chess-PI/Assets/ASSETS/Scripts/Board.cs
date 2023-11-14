@@ -11,7 +11,7 @@ using static Moves;
 using static Coordinates;
     public class Board {
         private Piece [,] Pieces = new Piece[8,8];
-        
+        public string turn= "white";
         public Board(){
             for(int x=0; x<8; x++){
                 for(int y=0; y<8; y++){
@@ -97,12 +97,26 @@ using static Coordinates;
                     .Concat(Moves.moveLine(this,p.coordinates,-1,1,1)).ToList()
                     .Concat(Moves.moveLine(this,p.coordinates,-1,-1,1)).ToList();
             }
+            if(p.getName()=="white_hourse"|| p.getName()=="black_hourse"){
+                 return Moves.moveLine(this,p.coordinates,2,1,1)
+                    .Concat(Moves.moveLine(this,p.coordinates,2,-1,1)).ToList()
+                    .Concat(Moves.moveLine(this,p.coordinates,-2,1,1)).ToList()
+                    .Concat(Moves.moveLine(this,p.coordinates,-2,-1,1)).ToList()
+                    .Concat(Moves.moveLine(this,p.coordinates,1,2,1)).ToList()
+                    .Concat(Moves.moveLine(this,p.coordinates,-1,2,1)).ToList()
+                    .Concat(Moves.moveLine(this,p.coordinates,1,-2,1)).ToList()
+                    .Concat(Moves.moveLine(this,p.coordinates,-1,-2,1)).ToList();
+            }
             return null;
         
         }
-        public void move(Coordinates previousCoordinate, Coordinates newCoordinate, Piece Piece){           
+        public void move(Coordinates previousCoordinate, Coordinates newCoordinate, Piece Piece){ 
+            if(Piece.getColor()==turn){          
             Pieces[previousCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
             Pieces[newCoordinate.x,newCoordinate.y] = new Piece(Piece.getName(),newCoordinate.x,newCoordinate.y);
+            Pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
+             switchTurn();
+            }
         }
         public void print(){
             for(int x=0; x<8; x++){
@@ -111,6 +125,14 @@ using static Coordinates;
                     res += $" {Pieces[y,x].getName()}"; 
                 }
                 Debug.Log(res + "\n");
+            }
+        }
+
+        public void switchTurn(){
+            if(turn=="white"){
+                turn= "black";
+            } else if(turn=="black"){
+                turn= "white";
             }
         }
     }

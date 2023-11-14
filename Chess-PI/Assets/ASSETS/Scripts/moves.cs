@@ -8,12 +8,53 @@ public class Moves
 {
       public static List<Coordinates> movePawn(Board board,  Coordinates coordinates, int color){
             List<Coordinates> result = new List<Coordinates>();
-            if(color==0){
-                  Coordinates newCoordinates = new Coordinates(coordinates.x, coordinates.y + 1);
-                  result.Add(newCoordinates);
+            Piece piece =board.getPiece(coordinates);
+
+            if(color==0)
+            {     Coordinates newCoordinates =new Coordinates(coordinates.x, coordinates.y + 1);
+                   Coordinates right= new Coordinates(newCoordinates.x+1,newCoordinates.y);
+                        Coordinates left= new Coordinates(newCoordinates.x-1,newCoordinates.y);
+
+                        if((left.insideBoard() && board.getPiece(left).getColor() =="black")){
+                              result.Add(left);
+                        }
+                        if((right.insideBoard() && board.getPiece(right).getColor() =="black")){
+                              result.Add(right);
+                        }
+                  if(board.getPiece(newCoordinates).getName() == "null"){
+                        result.Add(newCoordinates);
+                       
+                  } else {
+                        return result;
+                  }
+                  if(piece.hasMoved == false){
+                        newCoordinates =new Coordinates(coordinates.x, coordinates.y + 2);
+                        if(board.getPiece(newCoordinates).getName() == "null"){
+                              result.Add(newCoordinates);
+                        }
+                  }
             } else {
-                  Coordinates newCoordinates = new Coordinates(coordinates.x, coordinates.y - 1);
-                  result.Add(newCoordinates);
+                  Coordinates newCoordinates =new Coordinates(coordinates.x, coordinates.y - 1);
+                   Coordinates right= new Coordinates(newCoordinates.x+1,newCoordinates.y);
+                  Coordinates left= new Coordinates(newCoordinates.x-1,newCoordinates.y);
+
+                        if((left.insideBoard() && board.getPiece(left).getColor() =="white")){
+                              result.Add(left);
+                        }
+                        if((right.insideBoard() && board.getPiece(right).getColor() =="white")){
+                              result.Add(right);
+                        }
+                  if(board.getPiece(newCoordinates).getName() == "null"){
+                        result.Add(newCoordinates);
+                  } else {
+                        return result;
+                  }
+                  if(piece.hasMoved == false){
+                        newCoordinates =new Coordinates(coordinates.x, coordinates.y - 2);
+                        if(board.getPiece(newCoordinates).getName() == "null"){
+                              result.Add(newCoordinates);
+                        }
+                  }
             }
             return result;
       }
