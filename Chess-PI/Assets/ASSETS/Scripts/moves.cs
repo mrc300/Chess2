@@ -75,7 +75,37 @@ public class Moves
                               result.Add(nCoordinates);
                         }
                   }
-            }
+          }
             return result;
       }
+
+
+      public static List<Coordinates> castle(Board b, Piece king){
+            List<Coordinates> result = new List<Coordinates>();
+            if(king.getColor()==b.turn){
+            if(king.getColor() == "white" && king.hasMoved == false){
+                  if(b.getPiece(7,0).getName()== "white_rook" && b.getPiece(7,0).hasMoved == false
+                  && b.getPiece(6,0).getName()== "null" && b.getPiece(5,0).getName()== "null") {
+                        result.Add(new Coordinates(7,0));
+                  }   
+                  if(b.getPiece(0,0).getName()== "white_rook" && b.getPiece(0,0).hasMoved == false
+                  && b.getPiece(1,0).getName()== "null" && b.getPiece(2,0).getName()== "null" && b.getPiece(3,0).getName()== "null") {
+                        result.Add(new Coordinates(0,0));
+                  }        
+            }   
+              if(king.getColor() == "black" && king.hasMoved == false){
+                  if(b.getPiece(7,7).getName()== "black_rook" && b.getPiece(7,7).hasMoved == false
+                  && b.getPiece(6,7).getName()== "null" && b.getPiece(5,7).getName()== "null") {
+                        result.Add(new Coordinates(7,7));
+                  }   
+                  if(b.getPiece(0,7).getName()== "black_rook" && b.getPiece(0,7).hasMoved == false
+                  && b.getPiece(1,7).getName()== "null" && b.getPiece(2,7).getName()== "null" && b.getPiece(3,7).getName()== "null") {
+                        result.Add(new Coordinates(0,7));
+                  }        
+            }   
+            }
+            return result;  
+      } 
+
+
 }

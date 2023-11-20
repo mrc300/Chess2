@@ -12,6 +12,8 @@ using static Coordinates;
     public class Board {
         private Piece [,] Pieces = new Piece[8,8];
         public string turn= "white";
+
+        
         public Board(){
             for(int x=0; x<8; x++){
                 for(int y=0; y<8; y++){
@@ -89,13 +91,14 @@ using static Coordinates;
             }
             if(p.getName() == "white_king" || p.getName() == "black_king"){
                 return Moves.moveLine(this,p,1,0,1)
-                    .Concat(Moves.moveLine(this,p,0,-1,1)).ToList()
-                    .Concat(Moves.moveLine(this,p,-0,1,1)).ToList()
-                    .Concat(Moves.moveLine(this,p,-1,0,1)).ToList()
-                    .Concat(Moves.moveLine(this,p,1,1,1)).ToList()
-                    .Concat(Moves.moveLine(this,p,1,-1,1)).ToList()
-                    .Concat(Moves.moveLine(this,p,-1,1,1)).ToList()
-                    .Concat(Moves.moveLine(this,p,-1,-1,1)).ToList();
+                     .Concat(Moves.moveLine(this,p,0,-1,1)).ToList()
+                     .Concat(Moves.moveLine(this,p,-0,1,1)).ToList()
+                     .Concat(Moves.moveLine(this,p,-1,0,1)).ToList()
+                     .Concat(Moves.moveLine(this,p,1,1,1)).ToList()
+                     .Concat(Moves.moveLine(this,p,1,-1,1)).ToList()
+                     .Concat(Moves.moveLine(this,p,-1,1,1)).ToList()
+                     .Concat(Moves.moveLine(this,p,-1,-1,1)).ToList()
+                     .Concat(Moves.castle(this,p)).ToList();
             }
             if(p.getName()=="white_hourse"|| p.getName()=="black_hourse"){
                  return Moves.moveLine(this,p,2,1,1)
@@ -111,13 +114,63 @@ using static Coordinates;
         
         }
         public void move(Coordinates previousCoordinate, Coordinates newCoordinate, Piece Piece){ 
-            if(Piece.getColor()==turn){          
+            if(Piece.getColor()==turn){   
+            if((Piece.getName()  == "white_king" && getPiece(newCoordinate).getName() == "white_rook")||
+             (Piece.getName()  == "black_king" && getPiece(newCoordinate).getName() == "black_rook"))  {
+                 castle(Piece, newCoordinate);
+            } else {    
             Pieces[previousCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
             Pieces[newCoordinate.x,newCoordinate.y] = new Piece(Piece.getName(),newCoordinate.x,newCoordinate.y);
             Pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
-             switchTurn();
+              switchTurn();
+            }
+           
             }
         }
+
+        public void castle(Piece king, Coordinates rook){
+            if(king.getColor() == "white"){
+                if(rook.x==7 && rook.y==0){
+                Pieces[4,0]=  new Piece(4,0);
+                Pieces[7,0]= new Piece(7,0);
+                Pieces[6,0]= new Piece("white_king",6,0);
+                Pieces[5,0]=  new Piece("white_rook",5,0);
+                Pieces[6,0].hasMoved = true;
+                Pieces[5,0].hasMoved= true;
+                 switchTurn();
+                }
+                if(rook.x==0 && rook.y==0){
+                Pieces[4,0]=  new Piece(4,0);
+                Pieces[0,0]= new Piece(0,0);
+                Pieces[2,0]= new Piece("white_king",2,0);
+                Pieces[3,0]=  new Piece("white_rook",3,0);
+                Pieces[2,0].hasMoved = true;
+                Pieces[3,0].hasMoved= true;
+                switchTurn();
+                }
+            } 
+            if(king.getColor() == "black"){
+                if(rook.x==7 && rook.y==7){
+                Pieces[4,7]=  new Piece(4,7);
+                Pieces[7,7]= new Piece(7,7);
+                Pieces[6,7]= new Piece("black_king",6,7);
+                Pieces[5,7]=  new Piece("black_rook",5,7);
+                Pieces[6,7].hasMoved = true;
+                Pieces[5,7].hasMoved= true;
+                 switchTurn();
+                }
+                if(rook.x==0 && rook.y==7){
+                Pieces[4,7]=  new Piece(4,7);
+                Pieces[0,7]= new Piece(0,7);
+                Pieces[2,7]= new Piece("black_king",2,7);
+                Pieces[3,7]=  new Piece("black_rook",3,7);
+                Pieces[2,7].hasMoved = true;
+                Pieces[3,7].hasMoved= true;
+                switchTurn();
+                }
+            }
+        }
+        
         public void print(){
             for(int x=0; x<8; x++){
                 string res = "";
@@ -135,5 +188,7 @@ using static Coordinates;
                 turn= "white";
             }
         }
-    }
+
+
+}    
 

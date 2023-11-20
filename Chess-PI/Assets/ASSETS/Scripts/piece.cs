@@ -8,7 +8,6 @@ public class Piece
 {
     private string name,color;
     public Coordinates coordinates;
-    
     public bool hasMoved;
     public Piece (int x, int y){
         this.name= "null";
