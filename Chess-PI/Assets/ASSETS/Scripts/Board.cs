@@ -9,7 +9,8 @@ using UnityEngine;
 using static Piece;
 using static Moves;
 using static Coordinates;
-    public class Board {
+using UnityEngine.UIElements;
+public class Board {
         private Piece [,] Pieces = new Piece[8,8];
         public string turn= "white";
 
@@ -188,6 +189,31 @@ using static Coordinates;
                 turn= "white";
             }
         }
+
+
+public bool inCheck (Piece piece){
+        List<Coordinates> validMoves;
+        Coordinates piecePosition = piece.coordinates;
+            for(int x=0; x<8; x++){
+            for(int y=0; y<8; y++){
+                if(!(getPiece(x,y).equals(piece))){
+                validMoves = movePlate(getPiece(x,y));
+                foreach(Coordinates c in validMoves){
+                    if(c.x== piecePosition.x && c.y== piecePosition.y){
+                        return true;
+                    }
+
+                }
+            }
+            }
+}
+    return false;
+}
+
+
+
+
+
 
 
 }    
