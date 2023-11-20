@@ -60,52 +60,52 @@ using static Coordinates;
 
         public List<Coordinates> movePlate(Piece p){
             if(p.getName() == "white_pawn"){
-                return Moves.movePawn(this,p.coordinates,0);
+                return Moves.movePawn(this,p);
             }
             if(p.getName()== "black_pawn"){
-                return Moves.movePawn(this,p.coordinates,1);
+                return Moves.movePawn(this,p);
             }
             if(p.getName() == "white_bishop" || p.getName() == "black_bishop"){
-                return Moves.moveLine(this,p.coordinates,1,1,7)
-                    .Concat(Moves.moveLine(this,p.coordinates,1,-1,7)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,-1,1,7)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,-1,-1,7)).ToList();
+                return Moves.moveLine(this,p,1,1,7)
+                    .Concat(Moves.moveLine(this,p,1,-1,7)).ToList()
+                    .Concat(Moves.moveLine(this,p,-1,1,7)).ToList()
+                    .Concat(Moves.moveLine(this,p,-1,-1,7)).ToList();
             }
             if(p.getName() == "white_rook" || p.getName() == "black_rook"){
-                return Moves.moveLine(this,p.coordinates,1,0,7)
-                    .Concat(Moves.moveLine(this,p.coordinates,0,-1,7)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,-0,1,7)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,-1,0,7)).ToList();
+                return Moves.moveLine(this,p,1,0,7)
+                    .Concat(Moves.moveLine(this,p,0,-1,7)).ToList()
+                    .Concat(Moves.moveLine(this,p,-0,1,7)).ToList()
+                    .Concat(Moves.moveLine(this,p,-1,0,7)).ToList();
             }
             if(p.getName() == "white_queen" || p.getName() == "black_queen"){
-                return Moves.moveLine(this,p.coordinates,1,0,7)
-                    .Concat(Moves.moveLine(this,p.coordinates,0,-1,7)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,-0,1,7)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,-1,0,7)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,1,1,7)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,1,-1,7)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,-1,1,7)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,-1,-1,7)).ToList();
+                return Moves.moveLine(this,p,1,0,7)
+                    .Concat(Moves.moveLine(this,p,0,-1,7)).ToList()
+                    .Concat(Moves.moveLine(this,p,-0,1,7)).ToList()
+                    .Concat(Moves.moveLine(this,p,-1,0,7)).ToList()
+                    .Concat(Moves.moveLine(this,p,1,1,7)).ToList()
+                    .Concat(Moves.moveLine(this,p,1,-1,7)).ToList()
+                    .Concat(Moves.moveLine(this,p,-1,1,7)).ToList()
+                    .Concat(Moves.moveLine(this,p,-1,-1,7)).ToList();
             }
             if(p.getName() == "white_king" || p.getName() == "black_king"){
-                return Moves.moveLine(this,p.coordinates,1,0,1)
-                    .Concat(Moves.moveLine(this,p.coordinates,0,-1,1)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,-0,1,1)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,-1,0,1)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,1,1,1)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,1,-1,1)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,-1,1,1)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,-1,-1,1)).ToList();
+                return Moves.moveLine(this,p,1,0,1)
+                    .Concat(Moves.moveLine(this,p,0,-1,1)).ToList()
+                    .Concat(Moves.moveLine(this,p,-0,1,1)).ToList()
+                    .Concat(Moves.moveLine(this,p,-1,0,1)).ToList()
+                    .Concat(Moves.moveLine(this,p,1,1,1)).ToList()
+                    .Concat(Moves.moveLine(this,p,1,-1,1)).ToList()
+                    .Concat(Moves.moveLine(this,p,-1,1,1)).ToList()
+                    .Concat(Moves.moveLine(this,p,-1,-1,1)).ToList();
             }
             if(p.getName()=="white_hourse"|| p.getName()=="black_hourse"){
-                 return Moves.moveLine(this,p.coordinates,2,1,1)
-                    .Concat(Moves.moveLine(this,p.coordinates,2,-1,1)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,-2,1,1)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,-2,-1,1)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,1,2,1)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,-1,2,1)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,1,-2,1)).ToList()
-                    .Concat(Moves.moveLine(this,p.coordinates,-1,-2,1)).ToList();
+                 return Moves.moveLine(this,p,2,1,1)
+                    .Concat(Moves.moveLine(this,p,2,-1,1)).ToList()
+                    .Concat(Moves.moveLine(this,p,-2,1,1)).ToList()
+                    .Concat(Moves.moveLine(this,p,-2,-1,1)).ToList()
+                    .Concat(Moves.moveLine(this,p,1,2,1)).ToList()
+                    .Concat(Moves.moveLine(this,p,-1,2,1)).ToList()
+                    .Concat(Moves.moveLine(this,p,1,-2,1)).ToList()
+                    .Concat(Moves.moveLine(this,p,-1,-2,1)).ToList();
             }
             return null;
         
