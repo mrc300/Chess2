@@ -30,6 +30,26 @@ public class Game : MonoBehaviour
                 mouseWorldPos.z = 0f; // zero z
                 Coordinates offsetWorldPos = new Coordinates(mouseWorldPos);
                 if(offsetWorldPos.insideBoard()){
+<<<<<<< HEAD
+                //Debug.Log($"{(int)(offsetWorldPos.x)} , {(int)(offsetWorldPos.y)}");
+                Piece clickedPiece = board.getPiece(offsetWorldPos.x, offsetWorldPos.y);
+                if(clickedPiece.getName() != "null" || previousPiece != null){
+                    if (previousPiece != null && !(previousPiece.equals(clickedPiece))){
+                        removeMovePlates();
+                        if(offsetWorldPos.inVector(previousValidMoves)){
+                            print("peça movida");
+                            movePiece(previousPiece.coordinates,offsetWorldPos,previousPiece);
+                            
+                        }
+                        previousValidMoves = null; 
+                        previousPiece = null;
+                    } else {
+                        List<Coordinates> validMoves = board.movePlate(clickedPiece);
+                        createmovePlate(validMoves, offsetWorldPos);
+                        previousValidMoves = validMoves;
+                        previousPiece = clickedPiece;
+                    }             
+=======
                     //Debug.Log($"{(int)(offsetWorldPos.x)} , {(int)(offsetWorldPos.y)}");
                     Piece clickedPiece = board.getPiece(offsetWorldPos.x, offsetWorldPos.y);
                     if(clickedPiece.getName() != "null" || previousPiece != null){
@@ -49,6 +69,7 @@ public class Game : MonoBehaviour
                         }             
                     }
                     previousUnityCoords= mouseWorldPos;
+>>>>>>> parent of 3f2d89d (Revert "merda")
                 }
             }
         } else {
@@ -100,7 +121,7 @@ public class Game : MonoBehaviour
 
 
     void movePiece(Coordinates previousCoordinate,Coordinates newCoordinate, Piece Piece){
-            board.move(previousCoordinate,newCoordinate);
+            board.move(previousCoordinate,newCoordinate,Piece);
             removePieces();
             for(int x=0; x<8; x++){
             for(int y=0; y<8; y++){
