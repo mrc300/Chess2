@@ -83,7 +83,7 @@ public class Board {
         }
 
         public List<Coordinates> movePlate(Piece p,bool bothColors){
-            if(p.getColor() == turn || bothColors){
+            if(winner == "null" && (p.getColor() == turn || bothColors)){
                 if(p.getName() == "white_pawn"){
                     return Moves.movePawn(this,p);
                 }
@@ -149,8 +149,7 @@ public class Board {
                     pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
                     switchTurn();
                     if(!isCloned){
-                        string winner = getWinner(turn);
-                        Debug.Log(winner);
+                        winner = checkWinner(turn);
                     }
                 }
             }
@@ -255,8 +254,7 @@ public bool isCheck (Piece piece){
     return false;
 }
 
-public string getWinner(string color){
-    Debug.Log(isCheck(getKing(color)));
+public string checkWinner(string color){
     if(isCheck(getKing(color))){
         for(int x=0; x<8; x++){
             for(int y= 0 ; y< 8; y++){
@@ -267,7 +265,9 @@ public string getWinner(string color){
             }
         }
         switchTurn();
-        return color;
+        string res = color;
+        switchTurn();
+        return res;
     }
     return "null";
 }

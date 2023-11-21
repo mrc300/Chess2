@@ -6,10 +6,11 @@ using static Board;
 using static Piece;
 using UnityEngine.UIElements;
 using Unity.VisualScripting;
+using TMPro;
 public class Game : MonoBehaviour
 {
     public GameObject black_pawn, black_queen, black_king, black_hourse, black_rook, black_bishop, white_pawn, white_queen, white_king, white_hourse, white_rook, white_bishop,lightTile, brownTile,movePlate,Null;
-
+    public TextMeshProUGUI text;
     
     public Board board = new Board();
     private Vector3 iBoard = new Vector3(-31.53f,-31.53f,0);
@@ -52,7 +53,9 @@ public class Game : MonoBehaviour
                 }
             }
         } else {
-
+            Debug.Log(board.getWinner());
+            text.enabled = true;
+            text.SetText(board.getWinner());
         }
     }
 
@@ -100,9 +103,9 @@ public class Game : MonoBehaviour
 
 
     void movePiece(Coordinates previousCoordinate,Coordinates newCoordinate, Piece Piece){
-            board.move(previousCoordinate,newCoordinate);
-            removePieces();
-            for(int x=0; x<8; x++){
+        board.move(previousCoordinate,newCoordinate);
+        removePieces();
+        for(int x=0; x<8; x++){
             for(int y=0; y<8; y++){
                 GameObject cur = getSprite(board.getPiece(x,y).getName());
                 if(cur != null && board.getPiece(x,y).getName()!= "null"){
@@ -111,6 +114,7 @@ public class Game : MonoBehaviour
                 }
             }
         }
+
     }
 
 
