@@ -15,6 +15,7 @@ public class Board {
 
         private Piece [,] pieces = new Piece[8,8];
         private bool isCloned = false;
+        private string winner = "null";
         public string turn= "white";
         
         public object Clone()
@@ -82,7 +83,7 @@ public class Board {
         }
 
         public List<Coordinates> movePlate(Piece p,bool bothColors){
-            if(p.getColor() == turn || bothColors){
+            if(p.getColor() == turn || bothColors || true){
                 if(p.getName() == "white_pawn"){
                     return Moves.movePawn(this,p);
                 }
@@ -147,14 +148,15 @@ public class Board {
                     pieces[newCoordinate.x,newCoordinate.y] = new Piece(Piece.getName(),newCoordinate.x,newCoordinate.y);
                     pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
                     switchTurn();
-                }
-                /*for(int x= 0 ; x< 8; x++){
-                    for(int y= 0 ; y< 8; y++){
-                        if((getPiece(x,y).getName() == "white_king"|| getPiece(x,y).getName() == "black_king")){
-                            Debug.Log(isCheck(getPiece(x,y)));
+                    Piece king = getKing(turn);
+                    if(!isCloned){
+                        Debug.Log(king.getName()+" "+ king.coordinates.x + " " + king.coordinates.y +" isChek:"+isCheck(king));
+                        if(isCheck(king) && movePlate(king,false).Count == 0){
+                            switchTurn();
+                            winner=turn;
                         }
                     }
-                }*/
+                }
             }
         }
 
@@ -224,11 +226,10 @@ public bool willCheck(Coordinates previousCoordinate, Coordinates newCoordinate)
     if(!isCloned){  
         Board newBoard = (Board)this.Clone();
         newBoard.move(previousCoordinate,newCoordinate);
-        newBoard.print();
         for(int x= 0 ; x< 8; x++){
             for(int y= 0 ; y< 8; y++){
                 if((newBoard.getPiece(x,y).getName() == "white_king"||newBoard.getPiece(x,y).getName() == "black_king") && newBoard.getPiece(x,y).getColor() == turn){
-                    Debug.Log(newBoard.getPiece(x,y).getName() + " isCheck:" + newBoard.isCheck(newBoard.getPiece(x,y)));
+                    newBoard.turn = turn;
                     return newBoard.isCheck(newBoard.getPiece(x,y));
                 }
             }
@@ -244,7 +245,7 @@ public bool isCheck (Piece piece){
     for(int x=0; x<8; x++){
         for(int y=0; y<8; y++){
             if(!(getPiece(x,y).equals(piece))){
-                if(getPiece(x,y).getName() != "null")validMoves = movePlate(getPiece(x,y),true);
+                if(getPiece(x,y).getName() != "null")validMoves = movePlate(getPiece(x,y),false);
                 foreach(Coordinates c in validMoves){
                     if(c.x== piecePosition.x && c.y== piecePosition.y){
                         return true;
@@ -256,8 +257,21 @@ public bool isCheck (Piece piece){
     return false;
 }
 
+    public Piece getKing(string color){
+        for(int x=0; x<8; x++){
+            for(int y= 0 ; y< 8; y++){
+                if(getPiece(x,y).getColor() == color &&(getPiece(x,y).getName() == "white_king"|| getPiece(x,y).getName() == "black_king")){
+                    return getPiece(x,y);
+                }
+            }
+        }
+        return null;
 
+    }
 
+    public string getWinner(){
+        return winner;
+    }
 
 
 
