@@ -83,7 +83,7 @@ public class Board {
         }
 
         public List<Coordinates> movePlate(Piece p,bool bothColors){
-            if(p.getColor() == turn || bothColors || true){
+            if(p.getColor() == turn || bothColors){
                 if(p.getName() == "white_pawn"){
                     return Moves.movePawn(this,p);
                 }
@@ -148,13 +148,9 @@ public class Board {
                     pieces[newCoordinate.x,newCoordinate.y] = new Piece(Piece.getName(),newCoordinate.x,newCoordinate.y);
                     pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
                     switchTurn();
-                    Piece king = getKing(turn);
                     if(!isCloned){
-                        Debug.Log(king.getName()+" "+ king.coordinates.x + " " + king.coordinates.y +" isChek:"+isCheck(king));
-                        if(isCheck(king) && movePlate(king,false).Count == 0){
-                            switchTurn();
-                            winner=turn;
-                        }
+                        string winner = getWinner(turn);
+                        Debug.Log(winner);
                     }
                 }
             }
@@ -246,7 +242,7 @@ public bool isCheck (Piece piece){
         for(int y=0; y<8; y++){
             if(!(getPiece(x,y).equals(piece))){
                 isCloned = true;
-                if(getPiece(x,y).getName() != "null")validMoves = movePlate(getPiece(x,y),false);
+                if(getPiece(x,y).getName() != "null")validMoves = movePlate(getPiece(x,y),true);
                 isCloned=false;
                 foreach(Coordinates c in validMoves){
                     if(c.x== piecePosition.x && c.y== piecePosition.y){
@@ -257,6 +253,23 @@ public bool isCheck (Piece piece){
         }
     }
     return false;
+}
+
+public string getWinner(string color){
+    Debug.Log(isCheck(getKing(color)));
+    if(isCheck(getKing(color))){
+        for(int x=0; x<8; x++){
+            for(int y= 0 ; y< 8; y++){
+                if(getPiece(x,y).getColor() == color && getPiece(x,y).getName() != null){
+                    if(movePlate(getPiece(x,y),false).Count>0)
+                        return "null";
+                }
+            }
+        }
+        switchTurn();
+        return color;
+    }
+    return "null";
 }
 
     public Piece getKing(string color){
