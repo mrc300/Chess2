@@ -245,7 +245,9 @@ public bool isCheck (Piece piece){
     for(int x=0; x<8; x++){
         for(int y=0; y<8; y++){
             if(!(getPiece(x,y).equals(piece))){
+                isCloned = true;
                 if(getPiece(x,y).getName() != "null")validMoves = movePlate(getPiece(x,y),false);
+                isCloned=false;
                 foreach(Coordinates c in validMoves){
                     if(c.x== piecePosition.x && c.y== piecePosition.y){
                         return true;
