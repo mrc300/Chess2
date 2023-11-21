@@ -42,7 +42,7 @@ public class Game : MonoBehaviour
                         previousValidMoves = null; 
                         previousPiece = null;
                     } else {
-                        List<Coordinates> validMoves = board.movePlate(clickedPiece);
+                        List<Coordinates> validMoves = board.movePlate(clickedPiece,false);
                         createmovePlate(validMoves, offsetWorldPos);
                         previousValidMoves = validMoves;
                         previousPiece = clickedPiece;
@@ -98,7 +98,7 @@ public class Game : MonoBehaviour
 
 
     void movePiece(Coordinates previousCoordinate,Coordinates newCoordinate, Piece Piece){
-            board.move(previousCoordinate,newCoordinate,Piece);
+            board.move(previousCoordinate,newCoordinate);
             removePieces();
             for(int x=0; x<8; x++){
             for(int y=0; y<8; y++){
