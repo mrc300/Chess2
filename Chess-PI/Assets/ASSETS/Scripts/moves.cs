@@ -103,15 +103,5 @@ public class Moves
             }   
             }
             return result;  
-            
-      } 
-
-
-
-
-
-
-
-
-
+      }
 }

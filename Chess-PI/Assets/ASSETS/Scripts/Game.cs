@@ -38,7 +38,7 @@ public class Game : MonoBehaviour
                             removeMovePlates();
                             if(offsetWorldPos.inVector(previousValidMoves)){
                                 movePiece(previousPiece.coordinates,offsetWorldPos,previousPiece);
-                                
+                                Debug.Log(board.toFen());
                             }
                             previousValidMoves = null; 
                             previousPiece = null;

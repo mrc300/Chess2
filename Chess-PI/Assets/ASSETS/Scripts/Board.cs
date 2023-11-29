@@ -284,12 +284,38 @@ public string checkWinner(string color){
 
     }
 
-    public string getWinner(){
-        return winner;
+    public string toFen(){
+        string res = "";
+        int acc = 0;
+        for(int y = 0;y<8;y++){
+            for(int x = 0;x<8;x++){
+                if(getPiece(x,y).getName() != "null"){
+                    if(acc>0){
+                        res +=acc;
+                        acc = 0;
+                    }
+                    char initial =getPiece(x,y).getName().Split("_")[1][0];
+                    if(getPiece(x,y).getColor() == "white"){
+                        res += (char)(initial-0x20);
+                    }else{
+                        res += initial;
+                    }    
+                } else{
+                    acc++;
+                }
+            }
+            if(acc>0)
+                res+=acc;
+            res+="/";
+            acc = 0;
+        }
+        res += " " + turn[0];
+        return res;
     }
 
 
-
-
+    public string getWinner(){
+        return winner;
+    }
 }    
 
