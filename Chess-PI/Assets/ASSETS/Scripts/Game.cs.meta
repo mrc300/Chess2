@@ -7,17 +7,20 @@ MonoImporter:
   - black_pawn: {fileID: 7047291116323761152, guid: a3e01c735949fc84d90734137749e932, type: 3}
   - black_queen: {fileID: 8092292178933552637, guid: ab08f3b656d2a8a4b97fc00e6e5d1e57, type: 3}
   - black_king: {fileID: 1593783835933403930, guid: f74eab776e0cd6c4cacba02c61e6242f, type: 3}
-  - black_hourse: {fileID: 4645220512450143465, guid: 8a51501d05ef74540b464b3eca451caf, type: 3}
+  - black_night: {fileID: 4645220512450143465, guid: 8a51501d05ef74540b464b3eca451caf, type: 3}
   - black_rook: {fileID: 8868812893337801970, guid: 805625f77694fac48b13917d63a434d9, type: 3}
   - black_bishop: {fileID: 7269577295766320413, guid: d0dfe3546742b784489fdfd0c8ca688a, type: 3}
   - white_pawn: {fileID: 145822707661214795, guid: cb80ebcdf28cd8740a4bbb16f7ee6db7, type: 3}
   - white_queen: {fileID: 6072451182233663711, guid: 61e77de26437b674e98551c22d4100e6, type: 3}
   - white_king: {fileID: 5309006017092007167, guid: 1443f0035a5b4de40bea4ec1d850c1d8, type: 3}
-  - white_hourse: {fileID: 6328776509979986039, guid: f707d93ad5ebe8f45b5cf3f9de96d183, type: 3}
+  - white_night: {fileID: 6328776509979986039, guid: f707d93ad5ebe8f45b5cf3f9de96d183, type: 3}
   - white_rook: {fileID: 5176733158870010091, guid: 1b6a5d518b1386b49bc14616ceccf1ac, type: 3}
   - white_bishop: {fileID: 7947659872613818169, guid: 3b80ff491ebd5354a97eeb97297af3a7, type: 3}
   - lightTile: {fileID: 4318257151260163248, guid: 909078465aa829442afb75cf98c5e861, type: 3}
   - brownTile: {fileID: 3958577279938385857, guid: a2cb60ac339a45a478ba4d90ebc6f477, type: 3}
+  - movePlate: {instanceID: 0}
+  - Null: {instanceID: 0}
+  - text: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

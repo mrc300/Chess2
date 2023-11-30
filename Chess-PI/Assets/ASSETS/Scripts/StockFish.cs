@@ -1,13 +1,14 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using UnityEngine;
 
 public class StockFish
 {
     Process stockfishProcess;
     public StockFish(){
-        string stockfishPath = @"C:\Users\leosr\OneDrive\Ambiente de Trabalho\stockfish\stockfish-windows-x86-64-modern.exe";
+        string stockfishPath = Application.dataPath + @"/ASSETS/Scripts/stockfish/stockfish-windows-x86-64-modern.exe";
         stockfishProcess = new Process();
         stockfishProcess.StartInfo.FileName = stockfishPath;
         stockfishProcess.StartInfo.UseShellExecute = false;
@@ -17,16 +18,31 @@ public class StockFish
         stockfishProcess.Start();
     }
 
-    public void SendCommand(Process process, string command)
-    {
-        StreamWriter streamWriter = process.StandardInput;
-        streamWriter.WriteLine(command);
-        streamWriter.Flush();
+    public string getBestMove(string position) {
+        stockfishProcess.Refresh();
+        SendCommand("position fen " + position);
+        SendCommand("go depth 10");
+        string res = GetResponse();
+        return res;
     }
 
-    public string GetResponse(Process process)
+    private void SendCommand(string command)
     {
-        StreamReader streamReader = process.StandardOutput;
-        return streamReader.ReadLine();
+        stockfishProcess.StandardInput.WriteLine(command);
+        stockfishProcess.StandardInput.Flush();
+    }
+
+    private string GetResponse()
+    {
+
+        Thread.Sleep(100);
+        string res = "";
+        UnityEngine.Debug.Log(stockfishProcess.StandardOutput.Peek());
+        while (stockfishProcess.StandardOutput.Peek() > -1)
+        {
+            res += stockfishProcess.StandardOutput.ReadLine() + "\n";
+        }
+        stockfishProcess.StandardOutput.DiscardBufferedData();
+        return res;
     }
 }

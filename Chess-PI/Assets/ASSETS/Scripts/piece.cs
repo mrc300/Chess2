@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
-using UnityEditorInternal;
-using UnityEngine;
 using static Coordinates;
 public class Piece 
 {

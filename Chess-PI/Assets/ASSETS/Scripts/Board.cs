@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO.Pipes;
 using Unity.VisualScripting;
-using UnityEditorInternal;
 using UnityEngine;
 using static Piece;
 using static Moves;
@@ -48,11 +47,11 @@ public class Board {
                 pieces[7,0]= new Piece("white_rook",7,0) ; 
                 pieces[0,7]= new Piece("black_rook",0,7) ;
                 pieces[7,7]= new Piece("black_rook",7,7) ; 
-                //hourses
-                pieces[1,0]= new Piece("white_hourse",1,0) ;
-                pieces[6,0]= new Piece("white_hourse",6,0) ; 
-                pieces[1,7]= new Piece("black_hourse",1,7) ;
-                pieces[6,7]= new Piece("black_hourse",6,7) ; 
+                //nights
+                pieces[1,0]= new Piece("white_night",1,0) ;
+                pieces[6,0]= new Piece("white_night",6,0) ; 
+                pieces[1,7]= new Piece("black_night",1,7) ;
+                pieces[6,7]= new Piece("black_night",6,7) ; 
                 //bishops
                 pieces[2,0]= new Piece("white_bishop",2,0) ;
                 pieces[5,0]= new Piece("white_bishop",5,0) ; 
@@ -123,7 +122,7 @@ public class Board {
                         .Concat(Moves.moveLine(this,p,-1,-1,1)).ToList()
                         .Concat(Moves.castle(this,p)).ToList();
                 }
-                if(p.getName()=="white_hourse"|| p.getName()=="black_hourse"){
+                if(p.getName()=="white_night"|| p.getName()=="black_night"){
                     return Moves.moveLine(this,p,2,1,1)
                         .Concat(Moves.moveLine(this,p,2,-1,1)).ToList()
                         .Concat(Moves.moveLine(this,p,-2,1,1)).ToList()
@@ -287,7 +286,7 @@ public string checkWinner(string color){
     public string toFen(){
         string res = "";
         int acc = 0;
-        for(int y = 0;y<8;y++){
+        for(int y = 7;y>=0;y--){
             for(int x = 0;x<8;x++){
                 if(getPiece(x,y).getName() != "null"){
                     if(acc>0){

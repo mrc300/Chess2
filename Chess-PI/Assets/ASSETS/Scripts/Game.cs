@@ -9,19 +9,20 @@ using Unity.VisualScripting;
 using TMPro;
 public class Game : MonoBehaviour
 {
-    public GameObject black_pawn, black_queen, black_king, black_hourse, black_rook, black_bishop, white_pawn, white_queen, white_king, white_hourse, white_rook, white_bishop,lightTile, brownTile,movePlate,Null;
+    public GameObject black_pawn, black_queen, black_king, black_night, black_rook, black_bishop, white_pawn, white_queen, white_king, white_night, white_rook, white_bishop,lightTile, brownTile,movePlate,Null;
     public TextMeshProUGUI text;
     
     public Board board = new Board();
     private Vector3 iBoard = new Vector3(-31.53f,-31.53f,0);
 
     private Piece previousPiece;
+    private StockFish stockFish;
     private List<Coordinates> previousValidMoves = new List<Coordinates>();
     private Vector3 previousUnityCoords;
     void Start()
     {
         createBoard();
-        
+        stockFish = new StockFish();   
     }
 
     void Update(){
@@ -38,7 +39,7 @@ public class Game : MonoBehaviour
                             removeMovePlates();
                             if(offsetWorldPos.inVector(previousValidMoves)){
                                 movePiece(previousPiece.coordinates,offsetWorldPos,previousPiece);
-                                Debug.Log(board.toFen());
+                                Debug.Log(stockFish.getBestMove(board.toFen()));
                             }
                             previousValidMoves = null; 
                             previousPiece = null;
@@ -127,8 +128,8 @@ public class Game : MonoBehaviour
                     return white_pawn;
                 case "white_bishop":
                     return white_bishop;
-                case "white_hourse":
-                    return white_hourse;
+                case "white_night":
+                    return white_night;
                 case "white_rook":
                     return white_rook;
                 case "white_queen":
@@ -139,8 +140,8 @@ public class Game : MonoBehaviour
                     return black_pawn;
                 case "black_bishop":
                     return black_bishop;
-                case "black_hourse":
-                    return black_hourse;
+                case "black_night":
+                    return black_night;
                 case "black_rook":
                     return black_rook;
                 case "black_queen":
