@@ -25,6 +25,10 @@ public class Coordinates {
         this.y = y;
     }
 
+    public double distance(Coordinates c){
+        return Math.Sqrt(((x-c.x)*(x-c.x))+((y-c.y)*(y-c.y)));
+    }
+
     public bool inVector(List<Coordinates> coordinates) {
             for(int i=0; i<coordinates.Count;i++){
                 if(this.x== coordinates[i].x && this.y== coordinates[i].y){

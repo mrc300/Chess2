@@ -137,15 +137,19 @@ public class Board {
         
         }
         public void move(Coordinates previousCoordinate, Coordinates newCoordinate){
-            Piece Piece = getPiece(previousCoordinate); 
-            if(Piece.getColor()==turn){   
-                if((Piece.getName()  == "white_king" && getPiece(newCoordinate).getName() == "white_rook")||
-                (Piece.getName()  == "black_king" && getPiece(newCoordinate).getName() == "black_rook"))  {
-                    castle(Piece, newCoordinate);
+            Piece piece = getPiece(previousCoordinate); 
+            if(piece.getColor()==turn){
+                if(piece.getName().Split("_")[1] == "pawn" && getPiece(newCoordinate.x,previousCoordinate.y).enPassent)pieces[newCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
+                if(!isCloned)foreach(Piece p in pieces)p.enPassent=false;
+                if((piece.getName()  == "white_king" && getPiece(newCoordinate).getName() == "white_rook")||
+                (piece.getName()  == "black_king" && getPiece(newCoordinate).getName() == "black_rook"))  {
+                    castle(piece, newCoordinate);
                 } else {    
                     pieces[previousCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
-                    pieces[newCoordinate.x,newCoordinate.y] = new Piece(Piece.getName(),newCoordinate.x,newCoordinate.y);
+                    pieces[newCoordinate.x,newCoordinate.y] = new Piece(piece.getName(),newCoordinate.x,newCoordinate.y);
                     pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
+                    if(piece.getName().Split("_")[1] == "pawn" && previousCoordinate.distance(newCoordinate) >= 2)
+                        pieces[newCoordinate.x,newCoordinate.y].enPassent = true;    
                     switchTurn();
                     if(!isCloned){
                         winner = checkWinner(turn);
@@ -201,7 +205,7 @@ public class Board {
             for(int x=0; x<8; x++){
                 string res = "";
                 for(int y=0; y<8; y++){
-                    res += $" {pieces[y,x].getName()}"; 
+                    res += $" {pieces[y,x].enPassent}"; 
                 }
                 Debug.Log(res + "\n");
             }

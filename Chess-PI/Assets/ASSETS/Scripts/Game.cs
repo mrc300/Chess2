@@ -39,6 +39,7 @@ public class Game : MonoBehaviour
                             removeMovePlates();
                             if(offsetWorldPos.inVector(previousValidMoves)){
                                 movePiece(previousPiece.coordinates,offsetWorldPos,previousPiece);
+                                board.print();
                                 Debug.Log(stockFish.getBestMove(board.toFen()));
                             }
                             previousValidMoves = null; 

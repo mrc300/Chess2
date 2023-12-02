@@ -13,10 +13,10 @@ public class Moves
                   Coordinates newCoordinates =new Coordinates(coordinates.x, coordinates.y + 1);
                   Coordinates right= new Coordinates(newCoordinates.x+1,newCoordinates.y);
                   Coordinates left= new Coordinates(newCoordinates.x-1,newCoordinates.y);
-                  if((left.insideBoard() && board.getPiece(left).getColor() =="black") && !board.willCheck(coordinates,left)){
+                  if((left.insideBoard() && (board.getPiece(left).getColor() =="black"|| (board.getPiece(left.x,coordinates.y).getColor()=="black"&&board.getPiece(left.x,coordinates.y).enPassent))) && !board.willCheck(coordinates,left)){
                         result.Add(left);
                   }
-                  if((right.insideBoard() && board.getPiece(right).getColor() =="black") && !board.willCheck(coordinates,right)){
+                  if((right.insideBoard() && (board.getPiece(right).getColor() =="black"|| (board.getPiece(right.x,coordinates.y).getColor()=="black" &&board.getPiece(right.x,coordinates.y).enPassent))) && !board.willCheck(coordinates,right)){
                         result.Add(right);
                   }
                   if(newCoordinates.insideBoard() &&board.getPiece(newCoordinates).getName() == "null" && !board.willCheck(coordinates,newCoordinates)){
@@ -35,12 +35,12 @@ public class Moves
                   Coordinates newCoordinates =new Coordinates(coordinates.x, coordinates.y - 1);
                   Coordinates right= new Coordinates(newCoordinates.x+1,newCoordinates.y);
                   Coordinates left= new Coordinates(newCoordinates.x-1,newCoordinates.y);
-                        if((left.insideBoard() && board.getPiece(left).getColor() =="white") && !board.willCheck(coordinates,newCoordinates)){
-                              result.Add(left);
-                        }
-                        if((right.insideBoard() && board.getPiece(right).getColor() =="white") && !board.willCheck(coordinates,newCoordinates)){
-                              result.Add(right);
-                        }
+                  if((left.insideBoard() && (board.getPiece(left).getColor() =="white"|| (board.getPiece(left.x,coordinates.y).getColor()=="white"&&board.getPiece(left.x,coordinates.y).enPassent))) && !board.willCheck(coordinates,left)){
+                        result.Add(left);
+                  }
+                  if((right.insideBoard() && (board.getPiece(right).getColor() =="white"|| (board.getPiece(right.x,coordinates.y).getColor()=="white" &&board.getPiece(right.x,coordinates.y).enPassent))) && !board.willCheck(coordinates,right)){
+                        result.Add(right);
+                  }
                   if(newCoordinates.insideBoard() && board.getPiece(newCoordinates).getName() == "null" && !board.willCheck(coordinates,newCoordinates)){
                         result.Add(newCoordinates);
                   } else {
