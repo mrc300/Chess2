@@ -1,12 +1,16 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class StockFish
 {
     Process stockfishProcess;
+    private static int lineCount = 0;
+    private static StringBuilder output = new StringBuilder();
     public StockFish(){
         string stockfishPath = Application.dataPath + @"/ASSETS/Scripts/stockfish/stockfish-windows-x86-64-modern.exe";
         stockfishProcess = new Process();
@@ -15,6 +19,15 @@ public class StockFish
         stockfishProcess.StartInfo.RedirectStandardInput = true;
         stockfishProcess.StartInfo.RedirectStandardOutput = true;
         stockfishProcess.StartInfo.CreateNoWindow = true;
+        stockfishProcess.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
+        {
+            // Prepend line numbers to each line of the output.
+            if (!String.IsNullOrEmpty(e.Data))
+            {
+                lineCount++;
+                output.Append("\n[" + lineCount + "]: " + e.Data);
+            }
+        });
         stockfishProcess.Start();
     }
 
@@ -22,8 +35,8 @@ public class StockFish
         stockfishProcess.Refresh();
         SendCommand("position fen " + position);
         SendCommand("go depth 10");
-        string res = GetResponse();
-        return res;
+        SendCommand("");
+        return GetResponse();
     }
 
     private void SendCommand(string command)
@@ -34,15 +47,11 @@ public class StockFish
 
     private string GetResponse()
     {
-
-        Thread.Sleep(100);
-        string res = "";
-        UnityEngine.Debug.Log(stockfishProcess.StandardOutput.Peek());
-        while (stockfishProcess.StandardOutput.Peek() > -1)
-        {
-            res += stockfishProcess.StandardOutput.ReadLine() + "\n";
-        }
-        stockfishProcess.StandardOutput.DiscardBufferedData();
+        stockfishProcess.BeginOutputReadLine();
+        while(!output.ToString().Contains("bestmove"))Thread.Sleep(10);
+        stockfishProcess.CancelOutputRead();
+        string res =output.ToString();
+        output.Clear();
         return res;
     }
 }
