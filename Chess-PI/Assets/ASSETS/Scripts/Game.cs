@@ -10,8 +10,10 @@ using TMPro;
 public class Game : MonoBehaviour
 {
     public GameObject black_pawn, black_queen, black_king, black_night, black_rook, black_bishop, white_pawn, white_queen, white_king, white_night, white_rook, white_bishop,lightTile, brownTile,movePlate,Null;
-    public TextMeshProUGUI text;
-    
+    public TextMeshProUGUI winnerText;
+    public TextMeshProUGUI whiteTimerText;
+    public TextMeshProUGUI blackTimerText;
+    private Timer whiteTimer,blackTimer;
     public Board board = new Board();
     private Vector3 iBoard = new Vector3(-31.53f,-31.53f,0);
 
@@ -22,10 +24,21 @@ public class Game : MonoBehaviour
     void Start()
     {
         createBoard();
-        stockFish = new StockFish();   
+        stockFish = new StockFish();
+        whiteTimer= new Timer(whiteTimerText);
+        blackTimer= new Timer(blackTimerText);
+        float minutes= 1;   //em minutos!!!
+        whiteTimer.setTime(minutes);
+        blackTimer.setTime(minutes);   
     }
 
     void Update(){
+        if(board.turn == "white"){
+             whiteTimer.run();
+        }
+        if(board.turn == "black"){
+             blackTimer.run();
+        }
         if(board.getWinner() == "null"){
             if(Input.GetMouseButtonDown(0)) {
                 var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -39,7 +52,6 @@ public class Game : MonoBehaviour
                             removeMovePlates();
                             if(offsetWorldPos.inVector(previousValidMoves)){
                                 movePiece(previousPiece.coordinates,offsetWorldPos,previousPiece);
-                                board.print();
                                 Debug.Log(stockFish.getBestMove(board.toFen()));
                             }
                             previousValidMoves = null; 
@@ -56,8 +68,18 @@ public class Game : MonoBehaviour
             }
         } else {
             Debug.Log(board.getWinner());
-            text.enabled = true;
-            text.SetText(board.getWinner());
+            winnerText.enabled = true;
+            winnerText.SetText(board.getWinner());
+            whiteTimer.stop();
+            blackTimer.stop();
+        }
+        if(whiteTimer.running == false) {
+             winnerText.enabled = true;
+            winnerText.SetText("white");
+        }
+         if(whiteTimer.running == false) {
+             winnerText.enabled = true;
+            winnerText.SetText("black");
         }
     }
 

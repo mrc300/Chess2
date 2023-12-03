@@ -205,7 +205,7 @@ public class Board {
             for(int x=0; x<8; x++){
                 string res = "";
                 for(int y=0; y<8; y++){
-                    res += $" {pieces[y,x].enPassent}"; 
+                    res += $" {pieces[y,x].getName()}"; 
                 }
                 Debug.Log(res + "\n");
             }
