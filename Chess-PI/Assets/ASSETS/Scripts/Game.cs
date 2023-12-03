@@ -5,12 +5,10 @@ using static Coordinates;
 using static Board;
 using static Piece;
 using static Timer;
-using static RandomVariables;
 using UnityEngine.UIElements;
 using Unity.VisualScripting;
 using TMPro;
 using Unity.VisualScripting.FullSerializer;
-using Unity.Mathematics;
 public class Game : MonoBehaviour
 {
     public GameObject black_pawn, black_queen, black_king, black_night, black_rook, black_bishop, white_pawn, white_queen, white_king, white_night, white_rook, white_bishop,lightTile, brownTile,movePlate,Null;
@@ -32,7 +30,7 @@ public class Game : MonoBehaviour
         stockFish = new StockFish();
         whiteTimer= new Timer(whiteTimerText);
         blackTimer= new Timer(blackTimerText);
-        float minutes= 1;   //em minutos!!!
+        float minutes= 1;
         whiteTimer.setTime(minutes);
         blackTimer.setTime(minutes);
     }
@@ -73,6 +71,7 @@ public class Game : MonoBehaviour
             }
         }
         if(board.getWinner() !="null") {
+            Debug.Log(board.getWinner());
             winnerText.enabled = true;
             winnerText.SetText(board.getWinner());
             whiteTimer.stop();
