@@ -30,6 +30,11 @@ public class Game : MonoBehaviour
         float minutes= 5;   //em minutos!!!
         whiteTimer.setTime(minutes);
         blackTimer.setTime(minutes);   
+        whiteTimerText.enabled = true;
+        whiteTimer.setTimerText();
+        blackTimerText.enabled = true;
+        blackTimer.setTimerText();
+
     }
 
     void Update(){
