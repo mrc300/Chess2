@@ -17,7 +17,7 @@ public class Timer
             currentTime = limit;
     }
 
-
+//em minutos!
     public void setTime(float minutes){
         limit = minutes*60;
         currentTime = limit;
@@ -49,4 +49,7 @@ public class Timer
         }
         }
     }
+
+
+    
 }
