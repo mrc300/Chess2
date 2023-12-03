@@ -9,6 +9,7 @@ using static Piece;
 using static Moves;
 using static Coordinates;
 using UnityEngine.UIElements;
+using static RandomVariables;
 public class Board {
         
 
@@ -149,7 +150,14 @@ public class Board {
                     pieces[newCoordinate.x,newCoordinate.y] = new Piece(piece.getName(),newCoordinate.x,newCoordinate.y);
                     pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
                     if(piece.getName().Split("_")[1] == "pawn" && previousCoordinate.distance(newCoordinate) >= 2)
-                        pieces[newCoordinate.x,newCoordinate.y].enPassent = true;    
+                        pieces[newCoordinate.x,newCoordinate.y].enPassent = true;  
+
+                    if(piece.getName().Split("_")[1] =="pawn" && (newCoordinate.y == 7 || newCoordinate.y ==0 )){
+                         pieces[previousCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
+                         pieces[newCoordinate.x,newCoordinate.y] = new Piece(piece.getName().Split("_")[0] +"_" +RandomVariables.vaPromocao(),newCoordinate.x,newCoordinate.y);
+                          pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
+                      
+                     }  
                     switchTurn();
                     if(!isCloned){
                         winner = checkWinner(turn);
@@ -297,7 +305,7 @@ public string checkWinner(string color){
                         res +=acc;
                         acc = 0;
                     }
-                    char initial =getPiece(x,y).getName().Split("_")[1][0];
+                    char initial = getPiece(x,y).getName().Split("_")[1][0];
                     if(getPiece(x,y).getColor() == "white"){
                         res += (char)(initial-0x20);
                     }else{

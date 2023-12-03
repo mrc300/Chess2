@@ -27,7 +27,7 @@ public class Game : MonoBehaviour
         stockFish = new StockFish();
         whiteTimer= new Timer(whiteTimerText);
         blackTimer= new Timer(blackTimerText);
-        float minutes= 1;   //em minutos!!!
+        float minutes= 5;   //em minutos!!!
         whiteTimer.setTime(minutes);
         blackTimer.setTime(minutes);   
     }
@@ -35,11 +35,12 @@ public class Game : MonoBehaviour
     void Update(){
         if(board.turn == "white"){
              whiteTimer.run();
+           //Debug.Log(RandomVariables.vaPromocao());
         }
         if(board.turn == "black"){
              blackTimer.run();
         }
-        if(board.getWinner() == "null"){
+        if(board.getWinner() == "null" && blackTimer.running == true && whiteTimer.running == true ){
             if(Input.GetMouseButtonDown(0)) {
                 var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 mouseWorldPos.z = 0f; // zero z
@@ -66,15 +67,16 @@ public class Game : MonoBehaviour
                     previousUnityCoords= mouseWorldPos;
                 }
             }
-        } else {
+        }
+         if(board.getWinner() != "null") {
             Debug.Log(board.getWinner());
             winnerText.enabled = true;
             winnerText.SetText(board.getWinner());
             whiteTimer.stop();
             blackTimer.stop();
         }
-        if(whiteTimer.running == false) {
-             winnerText.enabled = true;
+        if(blackTimer.running == false) {
+            winnerText.enabled = true;
             winnerText.SetText("white");
         }
          if(whiteTimer.running == false) {
