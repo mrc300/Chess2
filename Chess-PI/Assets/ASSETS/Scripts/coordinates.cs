@@ -27,7 +27,6 @@ public class Coordinates {
 
     public bool inVector(List<Coordinates> coordinates) {
             for(int i=0; i<coordinates.Count;i++){
-                Debug.Log($"{i}");
                 if(this.x== coordinates[i].x && this.y== coordinates[i].y){
                     return true;
                 }
