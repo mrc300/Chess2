@@ -1,18 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
-using UnityEditorInternal;
-using UnityEngine;
 using static Coordinates;
 public class Piece 
 {
     private string name,color;
     public Coordinates coordinates;
     public bool hasMoved;
+    public bool enPassent;
     public Piece (int x, int y){
         this.name= "null";
         this.color = "null";
         this.coordinates = new Coordinates(x,y);
+        enPassent=false;
         hasMoved=false;
     }
 
@@ -20,6 +20,7 @@ public class Piece
         this.name = name;
         this.color = name.Split("_")[0];
         this.coordinates= new Coordinates(x,y);
+        enPassent=false;
         hasMoved=false;
     }
     public string getName(){

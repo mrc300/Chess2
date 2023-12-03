@@ -6,24 +6,27 @@ using static Board;
 using static Piece;
 using UnityEngine.UIElements;
 using Unity.VisualScripting;
+using TMPro;
 public class Game : MonoBehaviour
 {
-    public GameObject black_pawn, black_queen, black_king, black_hourse, black_rook, black_bishop, white_pawn, white_queen, white_king, white_hourse, white_rook, white_bishop,lightTile, brownTile,movePlate,Null;
-
+    public GameObject black_pawn, black_queen, black_king, black_night, black_rook, black_bishop, white_pawn, white_queen, white_king, white_night, white_rook, white_bishop,lightTile, brownTile,movePlate,Null;
+    public TextMeshProUGUI text;
     
     public Board board = new Board();
     private Vector3 iBoard = new Vector3(-31.53f,-31.53f,0);
 
     private Piece previousPiece;
+    private StockFish stockFish;
     private List<Coordinates> previousValidMoves = new List<Coordinates>();
     private Vector3 previousUnityCoords;
     void Start()
     {
         createBoard();
-        
+        stockFish = new StockFish();   
     }
 
     void Update(){
+        if(board.getWinner() == "null"){
             if(Input.GetMouseButtonDown(0)) {
                 var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 mouseWorldPos.z = 0f; // zero z
@@ -36,6 +39,7 @@ public class Game : MonoBehaviour
                             removeMovePlates();
                             if(offsetWorldPos.inVector(previousValidMoves)){
                                 movePiece(previousPiece.coordinates,offsetWorldPos,previousPiece);
+                                board.print();
                                 Debug.Log(stockFish.getBestMove(board.toFen()));
                             }
                             previousValidMoves = null; 
@@ -49,10 +53,12 @@ public class Game : MonoBehaviour
                     }
                     previousUnityCoords= mouseWorldPos;
                 }
-                previousUnityCoords= mouseWorldPos;
             }
-            }
-
+        } else {
+            Debug.Log(board.getWinner());
+            text.enabled = true;
+            text.SetText(board.getWinner());
+        }
     }
 
     void createBoard(){
@@ -99,9 +105,9 @@ public class Game : MonoBehaviour
 
 
     void movePiece(Coordinates previousCoordinate,Coordinates newCoordinate, Piece Piece){
-            board.move(previousCoordinate,newCoordinate,Piece);
-            removePieces();
-            for(int x=0; x<8; x++){
+        board.move(previousCoordinate,newCoordinate);
+        removePieces();
+        for(int x=0; x<8; x++){
             for(int y=0; y<8; y++){
                 GameObject cur = getSprite(board.getPiece(x,y).getName());
                 if(cur != null && board.getPiece(x,y).getName()!= "null"){
@@ -110,6 +116,7 @@ public class Game : MonoBehaviour
                 }
             }
         }
+
     }
 
 
@@ -122,8 +129,8 @@ public class Game : MonoBehaviour
                     return white_pawn;
                 case "white_bishop":
                     return white_bishop;
-                case "white_hourse":
-                    return white_hourse;
+                case "white_night":
+                    return white_night;
                 case "white_rook":
                     return white_rook;
                 case "white_queen":
@@ -134,8 +141,8 @@ public class Game : MonoBehaviour
                     return black_pawn;
                 case "black_bishop":
                     return black_bishop;
-                case "black_hourse":
-                    return black_hourse;
+                case "black_night":
+                    return black_night;
                 case "black_rook":
                     return black_rook;
                 case "black_queen":
