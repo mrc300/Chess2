@@ -29,24 +29,25 @@ public class Game : MonoBehaviour
                 mouseWorldPos.z = 0f; // zero z
                 Coordinates offsetWorldPos = new Coordinates(mouseWorldPos);
                 if(offsetWorldPos.insideBoard()){
-                //Debug.Log($"{(int)(offsetWorldPos.x)} , {(int)(offsetWorldPos.y)}");
-                Piece clickedPiece = board.getPiece(offsetWorldPos.x, offsetWorldPos.y);
-                if(clickedPiece.getName() != "null" || previousPiece != null){
-                    if (previousPiece != null && !(previousPiece.equals(clickedPiece))){
-                        removeMovePlates();
-                        if(offsetWorldPos.inVector(previousValidMoves)){
-                            print("peça movida");
-                            movePiece(previousPiece.coordinates,offsetWorldPos,previousPiece);
-                            
-                        }
-                        previousValidMoves = null; 
-                        previousPiece = null;
-                    } else {
-                        List<Coordinates> validMoves = board.movePlate(clickedPiece);
-                        createmovePlate(validMoves, offsetWorldPos);
-                        previousValidMoves = validMoves;
-                        previousPiece = clickedPiece;
-                    }             
+                    //Debug.Log($"{(int)(offsetWorldPos.x)} , {(int)(offsetWorldPos.y)}");
+                    Piece clickedPiece = board.getPiece(offsetWorldPos.x, offsetWorldPos.y);
+                    if(clickedPiece.getName() != "null" || previousPiece != null){
+                        if (previousPiece != null && !(previousPiece.equals(clickedPiece))){
+                            removeMovePlates();
+                            if(offsetWorldPos.inVector(previousValidMoves)){
+                                movePiece(previousPiece.coordinates,offsetWorldPos,previousPiece);
+                                Debug.Log(stockFish.getBestMove(board.toFen()));
+                            }
+                            previousValidMoves = null; 
+                            previousPiece = null;
+                        } else {
+                            List<Coordinates> validMoves = board.movePlate(clickedPiece,false);
+                            createmovePlate(validMoves, offsetWorldPos);
+                            previousValidMoves = validMoves;
+                            previousPiece = clickedPiece;
+                        }             
+                    }
+                    previousUnityCoords= mouseWorldPos;
                 }
                 previousUnityCoords= mouseWorldPos;
             }

@@ -114,18 +114,21 @@ public class Board {
             return null;
         
         }
-        public void move(Coordinates previousCoordinate, Coordinates newCoordinate, Piece Piece){ 
+        public void move(Coordinates previousCoordinate, Coordinates newCoordinate){
+            Piece Piece = getPiece(previousCoordinate); 
             if(Piece.getColor()==turn){   
-            if((Piece.getName()  == "white_king" && getPiece(newCoordinate).getName() == "white_rook")||
-             (Piece.getName()  == "black_king" && getPiece(newCoordinate).getName() == "black_rook"))  {
-                 castle(Piece, newCoordinate);
-            } else {    
-            Pieces[previousCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
-            Pieces[newCoordinate.x,newCoordinate.y] = new Piece(Piece.getName(),newCoordinate.x,newCoordinate.y);
-            Pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
-              switchTurn();
-            }
-           
+                if((Piece.getName()  == "white_king" && getPiece(newCoordinate).getName() == "white_rook")||
+                (Piece.getName()  == "black_king" && getPiece(newCoordinate).getName() == "black_rook"))  {
+                    castle(Piece, newCoordinate);
+                } else {    
+                    pieces[previousCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
+                    pieces[newCoordinate.x,newCoordinate.y] = new Piece(Piece.getName(),newCoordinate.x,newCoordinate.y);
+                    pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
+                    switchTurn();
+                    if(!isCloned){
+                        winner = checkWinner(turn);
+                    }
+                }
             }
         }
 
@@ -176,7 +179,7 @@ public class Board {
             for(int x=0; x<8; x++){
                 string res = "";
                 for(int y=0; y<8; y++){
-                    res += $" {Pieces[y,x].getName()}"; 
+                    res += $" {pieces[y,x].getName()}"; 
                 }
                 Debug.Log(res + "\n");
             }
