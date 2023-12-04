@@ -9,7 +9,6 @@ public class Timer
     
     public TextMeshProUGUI timerText;
     public float currentTime;
-    private double incrementVal;
     public float limit;
     public bool running;
     private System.Random random;
@@ -25,7 +24,6 @@ public class Timer
     public void setTime(float minutes){
         limit = minutes*60;
         currentTime = limit;
-        incrementVal = currentTime/100;
     }
     public void stop(){
         running = false;
@@ -35,7 +33,7 @@ public class Timer
     }
 
     public void increment(){
-        currentTime+= (float)RandomVariables.randomNormal(random,incrementVal,incrementVal/2,0,incrementVal);
+        currentTime+= (float)RandomVariables.randomNormal(random,100,50,0,100)/20;
         setTimerText();
     }
 
