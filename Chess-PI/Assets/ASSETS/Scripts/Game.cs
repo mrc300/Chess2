@@ -14,7 +14,7 @@ public class Game : MonoBehaviour
     public TextMeshProUGUI whiteTimerText;
     public TextMeshProUGUI blackTimerText;
     private Timer whiteTimer,blackTimer;
-    public Board board = new Board();
+    public Board board = new Board(true);
     private Vector3 iBoard = new Vector3(-31.53f,-31.53f,0);
 
     private Piece previousPiece;
@@ -39,11 +39,11 @@ public class Game : MonoBehaviour
 
     void Update(){
         if(board.turn == "white"){
-             whiteTimer.run();
+            whiteTimer.run();
            //Debug.Log(RandomVariables.vaPromocao());
         }
         if(board.turn == "black"){
-             blackTimer.run();
+            blackTimer.run();
         }
         if(board.getWinner() == "null" && blackTimer.running == true && whiteTimer.running == true ){
             if(Input.GetMouseButtonDown(0)) {
