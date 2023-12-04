@@ -292,10 +292,9 @@ public string checkWinner(string color){
                 }
             }
         }
-        switchTurn();
-        string res = color;
-        switchTurn();
-        return res;
+        if(color=="black")
+            return "white";
+        else return "black";
     }
     return "null";
 }

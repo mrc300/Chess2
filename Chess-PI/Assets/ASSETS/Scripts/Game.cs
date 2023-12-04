@@ -73,13 +73,6 @@ public class Game : MonoBehaviour
                 }
             }
         }
-         if(board.getWinner() != "null") {
-            Debug.Log(board.getWinner());
-            winnerText.enabled = true;
-            winnerText.SetText(board.getWinner());
-            whiteTimer.stop();
-            blackTimer.stop();
-        }
         if(blackTimer.running == false) {
             winnerText.enabled = true;
             winnerText.SetText("white");
@@ -87,6 +80,13 @@ public class Game : MonoBehaviour
          if(whiteTimer.running == false) {
              winnerText.enabled = true;
             winnerText.SetText("black");
+        }
+        if(board.getWinner() != "null") {
+            Debug.Log(board.getWinner());
+            winnerText.enabled = true;
+            winnerText.SetText(board.getWinner());
+            whiteTimer.stop();
+            blackTimer.stop();
         }
     }
 
