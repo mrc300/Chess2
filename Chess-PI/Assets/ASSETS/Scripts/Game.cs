@@ -59,10 +59,14 @@ public class Game : MonoBehaviour
                         if (previousPiece != null && !(previousPiece.equals(clickedPiece))){
                             removeMovePlates();
                             if(offsetWorldPos.inVector(previousValidMoves)){
+                                if(board.turn == "white")
+                                    whiteTimer.increment();
+                                else
+                                    blackTimer.increment();
                                 movePiece(previousPiece.coordinates,offsetWorldPos,previousPiece);
                                 Debug.Log(stockFish.getBestMove(board.toFen()));
                             }
-                            previousValidMoves = null; 
+                            previousValidMoves = null;
                             previousPiece = null;
                         } else {
                             List<Coordinates> validMoves = board.movePlate(clickedPiece,false);
