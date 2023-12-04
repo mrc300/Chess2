@@ -7,6 +7,7 @@ using static Piece;
 using UnityEngine.UIElements;
 using Unity.VisualScripting;
 using TMPro;
+using static mainMenu;
 public class Game : MonoBehaviour
 {
     public GameObject black_pawn, black_queen, black_king, black_night, black_rook, black_bishop, white_pawn, white_queen, white_king, white_night, white_rook, white_bishop,lightTile, brownTile,movePlate,Null;
@@ -14,7 +15,8 @@ public class Game : MonoBehaviour
     public TextMeshProUGUI whiteTimerText;
     public TextMeshProUGUI blackTimerText;
     private Timer whiteTimer,blackTimer;
-    public Board board = new Board(true);
+    public static bool multiplayer = mainMenu.multiplayer;
+    public Board board = new Board(multiplayer);
     private Vector3 iBoard = new Vector3(-31.53f,-31.53f,0);
 
     private Piece previousPiece;
@@ -27,7 +29,7 @@ public class Game : MonoBehaviour
         stockFish = new StockFish();
         whiteTimer= new Timer(whiteTimerText);
         blackTimer= new Timer(blackTimerText);
-        float minutes= 5;   //em minutos!!!
+        float minutes = mainMenu.input;   //em minutos!!!
         whiteTimer.setTime(minutes);
         blackTimer.setTime(minutes);   
         whiteTimerText.enabled = true;
@@ -195,6 +197,7 @@ void removePieces()
         Destroy(PieceObject);
     }
 }
+
 
 
 }
