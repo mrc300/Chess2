@@ -16,7 +16,7 @@ public class Game : MonoBehaviour
     public TextMeshProUGUI blackTimerText;
     private Timer whiteTimer,blackTimer;
     public static bool multiplayer = mainMenu.multiplayer;
-    public Board board = new Board(multiplayer);
+    public Board board = new Board();
     private Vector3 iBoard = new Vector3(-31.53f,-31.53f,0);
 
     private Piece previousPiece;
@@ -40,6 +40,7 @@ public class Game : MonoBehaviour
     }
 
     void Update(){
+       // board.showEatenPieces();
         if(board.turn == "white"){
             whiteTimer.run();
            //Debug.Log(RandomVariables.vaPromocao());
