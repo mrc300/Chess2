@@ -16,13 +16,13 @@ public static class RandomVariables{
 
 
 
-    public static string vaPromocao()
+    public static string vaPromocao(Random random)
     {
         double probRainha = 0.5;
         double probTorre = 0.3;
         double probCavalo = 0.1;
         double probBispo = 0.1;
-        double escolha = new Random().NextDouble();
+        double escolha = random.NextDouble();
         if (escolha < probRainha)
             return "queen";
         else if (escolha < probRainha + probTorre)

@@ -17,15 +17,16 @@ public class Board {
 
         private Piece [,] pieces = new Piece[8,8];
         private bool isCloned = false;
+        private bool vsAi;
         private string winner = "null";
+        private StockFish stockFish;
         public string turn= "white";
-        
+        System.Random random = new System.Random();
         LinkedList<Piece> eatenPieces = new LinkedList<Piece>();
        
 
         public object Clone()
     {
-        Board newBoard = new Board();
         Piece[,] newPieces = new Piece[8,8]; 
         for(int x=0; x<8; x++){
                 for(int y=0; y<8; y++){
@@ -35,7 +36,9 @@ public class Board {
         return new Board(newPieces,turn,true);
     }
         
-        public Board(){
+         public Board(bool vsAi){
+            if(vsAi)stockFish = new StockFish();
+            this.vsAi = vsAi;
             for(int x=0; x<8; x++){
                 for(int y=0; y<8; y++){
                     pieces[x,y] = new Piece(x,y);
@@ -165,7 +168,7 @@ public class Board {
 
                     if(piece.getName().Split("_")[1] =="pawn" && (newCoordinate.y == 7 || newCoordinate.y ==0 )){
                          pieces[previousCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
-                         pieces[newCoordinate.x,newCoordinate.y] = new Piece(piece.getName().Split("_")[0] +"_" +RandomVariables.vaPromocao(),newCoordinate.x,newCoordinate.y);
+                         pieces[newCoordinate.x,newCoordinate.y] = new Piece(piece.getName().Split("_")[0] +"_" +RandomVariables.vaPromocao(random),newCoordinate.x,newCoordinate.y);
                          pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
                      }  
                     switchTurn();
@@ -174,6 +177,18 @@ public class Board {
                     }
                 }
             }
+            if(vsAi&& turn=="black" && winner=="null")
+                aiMove();
+        }
+
+        public void aiMove(){
+            string[] eval = stockFish.getBestMove(this.toFen()).Split("\n");
+            string bestmove = eval[eval.Length-1];
+            string aimove = bestmove.Split(" ")[2];
+            Debug.Log((char.ToUpper(aimove[0])-65) + " " +(aimove[1]-49) + " To:" + (char.ToUpper(aimove[2])-65) + " " +(aimove[3]-49));
+            Coordinates previousCoordinate = new Coordinates(char.ToUpper(aimove[0])-65,aimove[1]-49);
+            Coordinates newCoordinate = new Coordinates(char.ToUpper(aimove[2])-65,aimove[3]-49);
+            move(previousCoordinate,newCoordinate);
         }
 
         public void showEatenPieces(){
@@ -293,10 +308,9 @@ public string checkWinner(string color){
                 }
             }
         }
-        switchTurn();
-        string res = color;
-        switchTurn();
-        return res;
+        if(color=="black")
+            return "white";
+        else return "black";
     }
     return "null";
 }

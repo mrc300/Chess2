@@ -22,9 +22,7 @@ public class Moves
                   if(newCoordinates.insideBoard() &&board.getPiece(newCoordinates).getName() == "null" && !board.willCheck(coordinates,newCoordinates)){
                         result.Add(newCoordinates);
                   
-                  } else {
-                        return result;
-                  }
+                  } 
                   if(piece.hasMoved == false){
                         newCoordinates =new Coordinates(coordinates.x, coordinates.y + 2);
                         if(newCoordinates.insideBoard() &&board.getPiece(newCoordinates).getName() == "null" && !board.willCheck(coordinates,newCoordinates)){
@@ -43,9 +41,7 @@ public class Moves
                   }
                   if(newCoordinates.insideBoard() && board.getPiece(newCoordinates).getName() == "null" && !board.willCheck(coordinates,newCoordinates)){
                         result.Add(newCoordinates);
-                  } else {
-                        return result;
-                  }
+                  } 
                   if(piece.hasMoved == false ){
                         newCoordinates =new Coordinates(coordinates.x, coordinates.y - 2);
                         if(newCoordinates.insideBoard() &&board.getPiece(newCoordinates).getName() == "null" && !board.willCheck(coordinates,newCoordinates)){

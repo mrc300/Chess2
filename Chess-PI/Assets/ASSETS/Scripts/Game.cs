@@ -16,7 +16,7 @@ public class Game : MonoBehaviour
     public TextMeshProUGUI blackTimerText;
     private Timer whiteTimer,blackTimer;
     public static bool multiplayer = mainMenu.multiplayer;
-    public Board board = new Board();
+    public Board board = new Board(multiplayer);
     private Vector3 iBoard = new Vector3(-31.53f,-31.53f,0);
 
     private Piece previousPiece;
