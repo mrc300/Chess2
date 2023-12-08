@@ -23,7 +23,8 @@ public class Board {
         public string turn= "white";
         System.Random random = new System.Random();
         LinkedList<Piece> eatenPieces = new LinkedList<Piece>();
-       
+       public LinkedList<Piece> whiteEatenPieces = new LinkedList<Piece>();
+       public LinkedList<Piece> blackEatenPieces = new LinkedList<Piece>();
 
         public object Clone()
     {
@@ -147,6 +148,8 @@ public class Board {
         
         }
         public void move(Coordinates previousCoordinate, Coordinates newCoordinate){
+       // Revive();
+        //showEatenPieces();
             Piece piece = getPiece(previousCoordinate); 
             if(piece.getColor()==turn){
                 if(piece.getName().Split("_")[1] == "pawn" && getPiece(newCoordinate.x,previousCoordinate.y).enPassent)pieces[newCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
@@ -155,9 +158,12 @@ public class Board {
                 (piece.getName()  == "black_king" && getPiece(newCoordinate).getName() == "black_rook"))  {
                     castle(piece, newCoordinate);
                 } else {  
-                    if(pieces[newCoordinate.x,newCoordinate.y].getName() != null )   {
-                         Debug.Log(pieces[newCoordinate.x,newCoordinate.y].getName() + " was eaten");
-                         eatenPieces.AddLast(pieces[newCoordinate.x,newCoordinate.y]);
+                    if(pieces[newCoordinate.x,newCoordinate.y].getName() != "null" )   {
+                       //  Debug.Log(pieces[newCoordinate.x,newCoordinate.y].getName() + " was eaten");
+                        if(pieces[newCoordinate.x,newCoordinate.y].getColor() == "white" )
+                            whiteEatenPieces.AddLast(pieces[newCoordinate.x,newCoordinate.y]);
+                        if(pieces[newCoordinate.x,newCoordinate.y].getColor() == "black" )
+                            blackEatenPieces.AddLast(pieces[newCoordinate.x,newCoordinate.y]);
                     }  
                     pieces[previousCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
                     pieces[newCoordinate.x,newCoordinate.y] = new Piece(piece.getName(),newCoordinate.x,newCoordinate.y);
@@ -192,7 +198,7 @@ public class Board {
         }
 
         public void showEatenPieces(){
-            foreach(Piece aux in eatenPieces){
+            foreach(Piece aux in whiteEatenPieces){
                 if(aux.getName() != "null"){
                 Debug.Log(aux.getName());
                 }
@@ -360,5 +366,20 @@ public string checkWinner(string color){
     public string getWinner(){
         return winner;
     }
+
+    public void Revive(){
+        if(whiteEatenPieces.Count >=3){
+            (Piece, Coordinates) piece = RandomVariables.vaRevive(whiteEatenPieces);
+            Debug.Log(piece.Item1.getName() + " "+ piece.Item2.x + " "+ piece.Item2.y);
+                        pieces[piece.Item2.x,piece.Item2.y] = new Piece(piece.Item1.getName(),
+                        piece.Item2.x,piece.Item2.y);
+                      //  Debug.Log(piece.Item1 + " "+ piece.Item2.x + " "+ piece.Item2.y);
+                    Piece pieceToRemove= null;  
+        }
+    }
+
+
+
+
 }    
 
