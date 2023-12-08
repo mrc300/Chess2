@@ -10,11 +10,12 @@ using TMPro;
 using static mainMenu;
 public class Game : MonoBehaviour
 {
-    public GameObject black_pawn, black_queen, black_king, black_night, black_rook, black_bishop, white_pawn, white_queen, white_king, white_night, white_rook, white_bishop,lightTile, brownTile,movePlate,Null;
+    public GameObject black_pawn, black_queen, black_king, black_night, black_rook, black_bishop, white_pawn, white_queen, white_king, white_night, white_rook, white_bishop,lightTile, brownTile,movePlate,Null,whiteReviveButton;
     public TextMeshProUGUI winnerText;
     public TextMeshProUGUI whiteTimerText;
     public TextMeshProUGUI blackTimerText;
     private Timer whiteTimer,blackTimer;
+
     public static bool multiplayer = mainMenu.multiplayer;
     public Board board = new Board();
     private Vector3 iBoard = new Vector3(-31.53f,-31.53f,0);
@@ -24,7 +25,7 @@ public class Game : MonoBehaviour
     private List<Coordinates> previousValidMoves = new List<Coordinates>();
     private Vector3 previousUnityCoords;
     void Start()
-    {
+    {   
         createBoard();
         stockFish = new StockFish();
         whiteTimer= new Timer(whiteTimerText);
@@ -36,10 +37,14 @@ public class Game : MonoBehaviour
         whiteTimer.setTimerText();
         blackTimerText.enabled = true;
         blackTimer.setTimerText();
+        whiteReviveButton.SetActive(false);
 
     }
 
     void Update(){
+        if(board.whiteEatenPieces.Count >=3){
+        whiteReviveButton.SetActive(true);
+        }
        // board.showEatenPieces();
         if(board.turn == "white"){
             whiteTimer.run();
@@ -204,5 +209,9 @@ void removePieces()
 }
 
 
+public void reviveOnclick(){
+    board.Revive();
+    whiteReviveButton.SetActive(false);
+}
 
 }

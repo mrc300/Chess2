@@ -46,52 +46,74 @@ public static class RandomVariables{
         }
         
     }
-    public static string vaRevive(LinkedList<Piece> eatenPieces){
-
-        LinkedList<Prioridades> eaten= new LinkedList<Prioridades>();
-        LinkedList<Prioridades> prioridades = new LinkedList<Prioridades>();
-         prioridades.AddLast(new Prioridades("queen", 10));
-         prioridades.AddLast(new Prioridades("night", 5));
-         prioridades.AddLast(new Prioridades("bishop", 5));
-         prioridades.AddLast(new Prioridades("rook", 8));
-         prioridades.AddLast(new Prioridades("pawn", 8));
-         foreach(Piece aux in eatenPieces){
-            foreach(Prioridades aux2 in prioridades){
-                if(aux.getName().Split("_")[1]== aux2.name){
-                    eaten.AddLast(aux2);
-                }
-            }
-         }
-         double total= 0;
-         foreach(Prioridades aux in prioridades){
-            total += aux.prioridade;
-         } 
-        LinkedList<Prioridades> conversions= new LinkedList<Prioridades>();
-         foreach(Prioridades aux in prioridades){
-            double newPrioridade = aux.prioridade / total;
-            Prioridades novo = new Prioridades(aux.name, newPrioridade);
-            conversions.AddLast(novo);
-         } 
-             Random random = new Random();
-        double randomValue = random.NextDouble();
-        double cumulativeProbability = 0;
-
-        foreach (Prioridades conversion in conversions)
-        {
-            cumulativeProbability += conversion.prioridade;
-
-            if (randomValue <= cumulativeProbability)
-            {
-                return conversion.name;
-            }
-        }     
-        return null;
+    public static Piece theSelectedEatenPiece(LinkedList<Piece> eatenPieces){
+    if (eatenPieces.Count == 0){
+        throw new InvalidOperationException("The list is empty.");
     }
+
+    Random random = new Random();
+    int randomIndex = random.Next(0, eatenPieces.Count);
+
+    LinkedListNode<Piece> currentNode = eatenPieces.First;
+    for (int i = 0; i < randomIndex; i++){
+        currentNode = currentNode.Next;
+    }
+    Piece selectedPiece = currentNode.Value;
+    eatenPieces.Remove(currentNode);
+
+    return selectedPiece;
+}
+  
+    
+     static double GerarPosicaoGaussiana(double media, double desvioPadrao)
+    {
+        Random rand = new Random();
+        double u = rand.NextDouble(); 
+        double z = Math.Sqrt(-2.0 * Math.Log(u)) * Math.Cos(2.0 * Math.PI * rand.NextDouble());
+
         
+        double posicao = media + desvioPadrao * z;
+
+        return posicao;
+    }
     
 
-
     
+
+  public static (Piece, Coordinates) vaRevive(LinkedList<Piece> eatenPieces)
+{
+    Piece selectedPiece = theSelectedEatenPiece(eatenPieces);
+    double a = GerarPosicaoGaussiana(50, 10);
+    double b = GerarPosicaoGaussiana(50, 10);
+    
+    int x = (int) Math.Round((a*3)/50);
+    int y = (int) Math.Round((b*3)/50);
+    if(x>=8){
+        x=8 ;
+    }
+    if(y>=8){
+        y=8 ;
+    }
+
+    Coordinates posicao = new Coordinates(x, y);
+    return (selectedPiece, posicao);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
