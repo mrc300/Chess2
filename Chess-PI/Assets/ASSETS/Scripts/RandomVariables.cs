@@ -4,25 +4,21 @@ using Unity.VisualScripting;
 
 
 public static class RandomVariables{
-        public static double randomNormal(Random random ,double mean,double sd, double min, double max) {
-            double u1 = random.NextDouble();
-            double u2 = random.NextDouble();
-            double res = mean+(sd *Math.Sqrt(-2*Math.Log(u1))*Math.Cos(2*Math.PI * u2));
-            if (res > max || res < min) return randomNormal(random,mean,sd,min,max);
-            return res;
-        }
-
-
-
-
-
-    public static string vaPromocao()
+    public static double randomNormal(Random random ,double mean,double sd, double min, double max) {
+        double u1 = random.NextDouble();
+        double u2 = random.NextDouble();
+        double res = mean+(sd *Math.Sqrt(-2*Math.Log(u1))*Math.Cos(2*Math.PI * u2));
+        if (res > max || res < min) return randomNormal(random,mean,sd,min,max);
+        return res;
+    }
+    
+    public static string vaPromocao(Random random)
     {
         double probRainha = 0.5;
         double probTorre = 0.3;
         double probCavalo = 0.1;
         double probBispo = 0.1;
-        double escolha = new Random().NextDouble();
+        double escolha = random.NextDouble();
         if (escolha < probRainha)
             return "queen";
         else if (escolha < probRainha + probTorre)
@@ -33,7 +29,11 @@ public static class RandomVariables{
             return "bishop";
     }
 
-
+    public static bool willMove(Random random,int numAttackers){
+        double prob = 1/(numAttackers+0.1);
+        double res = random.NextDouble();
+        return res<prob || prob<0;
+    }
 
     public class Prioridades {
 

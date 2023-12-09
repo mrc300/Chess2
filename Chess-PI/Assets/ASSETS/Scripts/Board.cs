@@ -17,15 +17,17 @@ public class Board {
 
         private Piece [,] pieces = new Piece[8,8];
         private bool isCloned = false;
+        public bool vsAi;
         private string winner = "null";
+        private StockFish stockFish;
         public string turn= "white";
-        
+        System.Random random = new System.Random();
+        LinkedList<Piece> eatenPieces = new LinkedList<Piece>();
        public LinkedList<Piece> whiteEatenPieces = new LinkedList<Piece>();
        public LinkedList<Piece> blackEatenPieces = new LinkedList<Piece>();
 
         public object Clone()
     {
-        Board newBoard = new Board();
         Piece[,] newPieces = new Piece[8,8]; 
         for(int x=0; x<8; x++){
                 for(int y=0; y<8; y++){
@@ -35,7 +37,9 @@ public class Board {
         return new Board(newPieces,turn,true);
     }
         
-        public Board(){
+         public Board(bool vsAi){
+            if(vsAi)stockFish = new StockFish();
+            this.vsAi = vsAi;
             for(int x=0; x<8; x++){
                 for(int y=0; y<8; y++){
                     pieces[x,y] = new Piece(x,y);
@@ -148,37 +152,49 @@ public class Board {
         //showEatenPieces();
             Piece piece = getPiece(previousCoordinate); 
             if(piece.getColor()==turn){
-                if(piece.getName().Split("_")[1] == "pawn" && getPiece(newCoordinate.x,previousCoordinate.y).enPassent)pieces[newCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
-                if(!isCloned)foreach(Piece p in pieces)p.enPassent=false;
-                if((piece.getName()  == "white_king" && getPiece(newCoordinate).getName() == "white_rook")||
-                (piece.getName()  == "black_king" && getPiece(newCoordinate).getName() == "black_rook"))  {
-                    castle(piece, newCoordinate);
-                } else {  
-                    if(pieces[newCoordinate.x,newCoordinate.y].getName() != "null" )   {
-                       //  Debug.Log(pieces[newCoordinate.x,newCoordinate.y].getName() + " was eaten");
-                        if(pieces[newCoordinate.x,newCoordinate.y].getColor() == "white" )
-                            whiteEatenPieces.AddLast(pieces[newCoordinate.x,newCoordinate.y]);
-                        if(pieces[newCoordinate.x,newCoordinate.y].getColor() == "black" )
-                            blackEatenPieces.AddLast(pieces[newCoordinate.x,newCoordinate.y]);
-                    }  
-                    pieces[previousCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
-                    pieces[newCoordinate.x,newCoordinate.y] = new Piece(piece.getName(),newCoordinate.x,newCoordinate.y);
-                    pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
-                    
-                    if(piece.getName().Split("_")[1] == "pawn" && previousCoordinate.distance(newCoordinate) >= 2)
-                        pieces[newCoordinate.x,newCoordinate.y].enPassent = true;  
+                if(RandomVariables.willMove(random,newAttacks(previousCoordinate,newCoordinate)-attackCount(getPiece(previousCoordinate)))||isCloned){
+                    if(piece.getName().Split("_")[1] == "pawn" && getPiece(newCoordinate.x,previousCoordinate.y).enPassent)pieces[newCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
+                    if(!isCloned)foreach(Piece p in pieces)p.enPassent=false;
+                    if((piece.getName()  == "white_king" && getPiece(newCoordinate).getName() == "white_rook")||
+                    (piece.getName()  == "black_king" && getPiece(newCoordinate).getName() == "black_rook"))  {
+                        castle(piece, newCoordinate);
+                    } else {  
+                        if(pieces[newCoordinate.x,newCoordinate.y].getName() != "null" )   {
+                        //  Debug.Log(pieces[newCoordinate.x,newCoordinate.y].getName() + " was eaten");
+                            if(pieces[newCoordinate.x,newCoordinate.y].getColor() == "white" )
+                                whiteEatenPieces.AddLast(pieces[newCoordinate.x,newCoordinate.y]);
+                            if(pieces[newCoordinate.x,newCoordinate.y].getColor() == "black" )
+                                blackEatenPieces.AddLast(pieces[newCoordinate.x,newCoordinate.y]);
+                        }  
+                        pieces[previousCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
+                        pieces[newCoordinate.x,newCoordinate.y] = new Piece(piece.getName(),newCoordinate.x,newCoordinate.y);
+                        pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
+                        
+                        if(piece.getName().Split("_")[1] == "pawn" && previousCoordinate.distance(newCoordinate) >= 2)
+                            pieces[newCoordinate.x,newCoordinate.y].enPassent = true;  
 
-                    if(piece.getName().Split("_")[1] =="pawn" && (newCoordinate.y == 7 || newCoordinate.y ==0 )){
-                         pieces[previousCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
-                         pieces[newCoordinate.x,newCoordinate.y] = new Piece(piece.getName().Split("_")[0] +"_" +RandomVariables.vaPromocao(),newCoordinate.x,newCoordinate.y);
-                         pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
-                     }  
-                    switchTurn();
-                    if(!isCloned){
-                        winner = checkWinner(turn);
+                        if(piece.getName().Split("_")[1] =="pawn" && (newCoordinate.y == 7 || newCoordinate.y ==0 )){
+                            pieces[previousCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
+                            pieces[newCoordinate.x,newCoordinate.y] = new Piece(piece.getName().Split("_")[0] +"_" +RandomVariables.vaPromocao(random),newCoordinate.x,newCoordinate.y);
+                            pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
+                        }  
+                        switchTurn();
+                        if(!isCloned){
+                            winner = checkWinner(turn);
+                        }
                     }
                 }
             }
+        }
+
+        public void aiMove(){
+            string[] eval = stockFish.getBestMove(this.toFen()).Split("\n");
+            string bestmove = eval[eval.Length-1];
+            string aimove = bestmove.Split(" ")[2];
+            Debug.Log((char.ToUpper(aimove[0])-65) + " " +(aimove[1]-49) + " To:" + (char.ToUpper(aimove[2])-65) + " " +(aimove[3]-49));
+            Coordinates previousCoordinate = new Coordinates(char.ToUpper(aimove[0])-65,aimove[1]-49);
+            Coordinates newCoordinate = new Coordinates(char.ToUpper(aimove[2])-65,aimove[3]-49);
+            move(previousCoordinate,newCoordinate);
         }
 
         public void showEatenPieces(){
@@ -267,6 +283,22 @@ public bool willCheck(Coordinates previousCoordinate, Coordinates newCoordinate)
     return false;
 }
 
+public int newAttacks(Coordinates previousCoordinate, Coordinates newCoordinate){
+    if(!isCloned){  
+        Board newBoard = (Board)this.Clone();
+        newBoard.move(previousCoordinate,newCoordinate);
+        for(int x= 0 ; x< 8; x++){
+            for(int y= 0 ; y< 8; y++){
+                if((newBoard.getPiece(x,y).getName() == "white_king"||newBoard.getPiece(x,y).getName() == "black_king") && newBoard.getPiece(x,y).getColor() == turn){
+                    newBoard.turn = turn;
+                    newBoard.attackCount(newBoard.getPiece(x,y));
+                }
+            }
+        }
+    }
+    return 0;
+}
+
 
 public bool isCheck (Piece piece){
     List<Coordinates> validMoves = new List<Coordinates>();
@@ -288,6 +320,27 @@ public bool isCheck (Piece piece){
     return false;
 }
 
+public int attackCount (Piece piece){
+    List<Coordinates> validMoves = new List<Coordinates>();
+    Coordinates piecePosition = piece.coordinates;
+    int k = 0;
+    for(int x=0; x<8; x++){
+        for(int y=0; y<8; y++){
+            if(!(getPiece(x,y).equals(piece))){
+                isCloned = true;
+                if(getPiece(x,y).getName() != "null")validMoves = movePlate(getPiece(x,y),true);
+                isCloned=false;
+                foreach(Coordinates c in validMoves){
+                    if(c.x== piecePosition.x && c.y== piecePosition.y){
+                        k++;
+                    }
+                }
+            }
+        }
+    }
+    return k;
+}
+
 public string checkWinner(string color){
     if(isCheck(getKing(color))){
         for(int x=0; x<8; x++){
@@ -298,10 +351,9 @@ public string checkWinner(string color){
                 }
             }
         }
-        switchTurn();
-        string res = color;
-        switchTurn();
-        return res;
+        if(color=="black")
+            return "white";
+        else return "black";
     }
     return "null";
 }
