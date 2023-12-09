@@ -8,9 +8,10 @@ using UnityEngine.UIElements;
 using Unity.VisualScripting;
 using TMPro;
 using static mainMenu;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 public class Game : MonoBehaviour
 {
-    public GameObject black_pawn, black_queen, black_king, black_night, black_rook, black_bishop, white_pawn, white_queen, white_king, white_night, white_rook, white_bishop,lightTile, brownTile,movePlate,Null,whiteReviveButton;
+    public GameObject black_pawn, black_queen, black_king, black_night, black_rook, black_bishop, white_pawn, white_queen, white_king, white_night, white_rook, white_bishop,lightTile, brownTile,movePlate,Null,whiteReviveButton,blackReviveButton;
     public TextMeshProUGUI winnerText;
     public TextMeshProUGUI whiteTimerText;
     public TextMeshProUGUI blackTimerText;
@@ -19,7 +20,8 @@ public class Game : MonoBehaviour
     public static bool multiplayer = mainMenu.multiplayer;
     public Board board = new Board();
     private Vector3 iBoard = new Vector3(-31.53f,-31.53f,0);
-
+    private bool whiteRevive = false;
+    private bool blackRevive = false;
     private Piece previousPiece;
     private StockFish stockFish;
     private List<Coordinates> previousValidMoves = new List<Coordinates>();
@@ -38,12 +40,18 @@ public class Game : MonoBehaviour
         blackTimerText.enabled = true;
         blackTimer.setTimerText();
         whiteReviveButton.SetActive(false);
+        blackReviveButton.SetActive(false);
 
     }
 
     void Update(){
-        if(board.whiteEatenPieces.Count >=3){
+        if(board.whiteEatenPieces.Count >=3 && whiteRevive == false) {
         whiteReviveButton.SetActive(true);
+        whiteRevive = true;
+        }
+        if(board.blackEatenPieces.Count >=3 && blackRevive == false  ){
+        blackReviveButton.SetActive(true);
+        blackRevive = true;
         }
        // board.showEatenPieces();
         if(board.turn == "white"){
@@ -209,9 +217,45 @@ void removePieces()
 }
 
 
-public void reviveOnclick(){
-    board.Revive();
-    whiteReviveButton.SetActive(false);
-}
+public void whiteReviveOnclick(){
+    if(board.turn == "white"){
+        board.whiteRevive();
+        whiteReviveButton.SetActive(false);
+    removePieces();
+        for(int x=0; x<8; x++){
+            for(int y=0; y<8; y++){
+                GameObject cur = getSprite(board.getPiece(x,y).getName());
+                if(cur != null && board.getPiece(x,y).getName()!= "null"){
+                    GameObject nObj = Instantiate(cur, iBoard + new Vector3(x*(9.01f),y*(9.01f),-2), Quaternion.identity);
+                    nObj.tag = "Piece";
+                }
+            }
+        }
+        }
+    }
+    public void blackReviveOnclick(){
+        if(board.turn== "black"){
+        board.blackRevive();
+        blackReviveButton.SetActive(false);
+        removePieces();
+        for(int x=0; x<8; x++){
+            for(int y=0; y<8; y++){
+                GameObject cur = getSprite(board.getPiece(x,y).getName());
+                if(cur != null && board.getPiece(x,y).getName()!= "null"){
+                    GameObject nObj = Instantiate(cur, iBoard + new Vector3(x*(9.01f),y*(9.01f),-2), Quaternion.identity);
+                    nObj.tag = "Piece";
+                }
+            }
+        }
+        }
+    }
+
+
+
+
+
+
 
 }
+
+

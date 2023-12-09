@@ -352,16 +352,32 @@ public string checkWinner(string color){
         return winner;
     }
 
-    public void Revive(){
-        if(whiteEatenPieces.Count >=3){
-            (Piece, Coordinates) piece = RandomVariables.vaRevive(whiteEatenPieces);
-            Debug.Log(piece.Item1.getName() + " "+ piece.Item2.x + " "+ piece.Item2.y);
-                        pieces[piece.Item2.x,piece.Item2.y] = new Piece(piece.Item1.getName(),
-                        piece.Item2.x,piece.Item2.y);
-                      //  Debug.Log(piece.Item1 + " "+ piece.Item2.x + " "+ piece.Item2.y);
-                    Piece pieceToRemove= null;  
+    public void whiteRevive(){
+        (Piece, Coordinates) piece = RandomVariables.vaRevive(whiteEatenPieces);
+        Debug.Log(piece.Item1.getName() + " " + piece.Item2.x + " " + piece.Item2.y);
+        if(getPiece(piece.Item2.x, piece.Item2.y).getName()== "black_king"){
+            whiteRevive();
+        }else{
+        pieces[piece.Item2.x, piece.Item2.y] = new Piece(piece.Item1.getName(), piece.Item2.x, piece.Item2.y);
+        turn = "black";
         }
-    }
+}
+
+
+
+   public void blackRevive(){
+        (Piece, Coordinates) piece = RandomVariables.vaRevive(blackEatenPieces);
+        Debug.Log(piece.Item1.getName() + " " + piece.Item2.x + " " + piece.Item2.y);
+        if(getPiece(piece.Item2.x, piece.Item2.y).getName()== "white_king"){
+            blackRevive();
+        }else{
+        pieces[piece.Item2.x, piece.Item2.y] = new Piece(piece.Item1.getName(), piece.Item2.x, piece.Item2.y);
+        turn = "white";
+        }
+
+}
+
+
 
 
 
