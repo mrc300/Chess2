@@ -19,16 +19,16 @@ public class Moves
                   if((right.insideBoard() && (board.getPiece(right).getColor() =="black"|| (board.getPiece(right.x,coordinates.y).getColor()=="black" &&board.getPiece(right.x,coordinates.y).enPassent))) && !board.willCheck(coordinates,right)){
                         result.Add(right);
                   }
-                  if(newCoordinates.insideBoard() &&board.getPiece(newCoordinates).getName() == "null" && !board.willCheck(coordinates,newCoordinates)){
-                        result.Add(newCoordinates);
-                  
-                  } 
-                  if(piece.hasMoved == false){
-                        newCoordinates =new Coordinates(coordinates.x, coordinates.y + 2);
-                        if(newCoordinates.insideBoard() &&board.getPiece(newCoordinates).getName() == "null" && !board.willCheck(coordinates,newCoordinates)){
-                              result.Add(newCoordinates);
+                  if(newCoordinates.insideBoard() &&board.getPiece(newCoordinates).getName() == "null"){
+                        if(!board.willCheck(coordinates,newCoordinates))result.Add(newCoordinates);
+                        if(piece.hasMoved == false){
+                              newCoordinates =new Coordinates(coordinates.x, coordinates.y + 2);
+                              if(newCoordinates.insideBoard() &&board.getPiece(newCoordinates).getName() == "null" && !board.willCheck(coordinates,newCoordinates)){
+                                    result.Add(newCoordinates);
+                              }
                         }
-                  }
+                  } 
+                  
             } else {
                   Coordinates newCoordinates =new Coordinates(coordinates.x, coordinates.y - 1);
                   Coordinates right= new Coordinates(newCoordinates.x+1,newCoordinates.y);
@@ -39,15 +39,16 @@ public class Moves
                   if((right.insideBoard() && (board.getPiece(right).getColor() =="white"|| (board.getPiece(right.x,coordinates.y).getColor()=="white" &&board.getPiece(right.x,coordinates.y).enPassent))) && !board.willCheck(coordinates,right)){
                         result.Add(right);
                   }
-                  if(newCoordinates.insideBoard() && board.getPiece(newCoordinates).getName() == "null" && !board.willCheck(coordinates,newCoordinates)){
-                        result.Add(newCoordinates);
-                  } 
-                  if(piece.hasMoved == false ){
-                        newCoordinates =new Coordinates(coordinates.x, coordinates.y - 2);
-                        if(newCoordinates.insideBoard() &&board.getPiece(newCoordinates).getName() == "null" && !board.willCheck(coordinates,newCoordinates)){
-                              result.Add(newCoordinates);
+                  if(newCoordinates.insideBoard() && board.getPiece(newCoordinates).getName() == "null" ){
+                        if(!board.willCheck(coordinates,newCoordinates))result.Add(newCoordinates);
+                        if(piece.hasMoved == false ){
+                              newCoordinates =new Coordinates(coordinates.x, coordinates.y - 2);
+                              if(newCoordinates.insideBoard() &&board.getPiece(newCoordinates).getName() == "null" && !board.willCheck(coordinates,newCoordinates)){
+                                    result.Add(newCoordinates);
+                              }
                         }
-                  }
+                  } 
+                  
             }
             return result;
       }
@@ -79,21 +80,21 @@ public class Moves
             if(king.getColor()==b.turn){
             if(king.getColor() == "white" && king.hasMoved == false){
                   if(b.getPiece(7,0).getName()== "white_rook" && b.getPiece(7,0).hasMoved == false
-                  && b.getPiece(6,0).getName()== "null" && b.getPiece(5,0).getName()== "null") {
+                  && b.getPiece(6,0).getName()== "null" && b.getPiece(5,0).getName()== "null" && !b.willCheck(new Coordinates(4,0),new Coordinates(7,0))) {
                         result.Add(new Coordinates(7,0));
                   }   
                   if(b.getPiece(0,0).getName()== "white_rook" && b.getPiece(0,0).hasMoved == false
-                  && b.getPiece(1,0).getName()== "null" && b.getPiece(2,0).getName()== "null" && b.getPiece(3,0).getName()== "null") {
+                  && b.getPiece(1,0).getName()== "null" && b.getPiece(2,0).getName()== "null" && b.getPiece(3,0).getName()== "null" &&!b.willCheck(new Coordinates(4,0),new Coordinates(0,0))) {
                         result.Add(new Coordinates(0,0));
                   }        
             }   
               if(king.getColor() == "black" && king.hasMoved == false){
                   if(b.getPiece(7,7).getName()== "black_rook" && b.getPiece(7,7).hasMoved == false
-                  && b.getPiece(6,7).getName()== "null" && b.getPiece(5,7).getName()== "null") {
+                  && b.getPiece(6,7).getName()== "null" && b.getPiece(5,7).getName()== "null" && !b.willCheck(new Coordinates(4,7),new Coordinates(7,7))) {
                         result.Add(new Coordinates(7,7));
                   }   
                   if(b.getPiece(0,7).getName()== "black_rook" && b.getPiece(0,7).hasMoved == false
-                  && b.getPiece(1,7).getName()== "null" && b.getPiece(2,7).getName()== "null" && b.getPiece(3,7).getName()== "null") {
+                  && b.getPiece(1,7).getName()== "null" && b.getPiece(2,7).getName()== "null" && b.getPiece(3,7).getName()== "null"  &&!b.willCheck(new Coordinates(4,7),new Coordinates(0,7))) {
                         result.Add(new Coordinates(0,7));
                   }        
             }   

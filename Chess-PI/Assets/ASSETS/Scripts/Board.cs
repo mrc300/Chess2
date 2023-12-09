@@ -17,7 +17,7 @@ public class Board {
 
         private Piece [,] pieces = new Piece[8,8];
         private bool isCloned = false;
-        private bool vsAi;
+        public bool vsAi;
         private string winner = "null";
         private StockFish stockFish;
         public string turn= "white";
@@ -152,39 +152,39 @@ public class Board {
         //showEatenPieces();
             Piece piece = getPiece(previousCoordinate); 
             if(piece.getColor()==turn){
-                if(piece.getName().Split("_")[1] == "pawn" && getPiece(newCoordinate.x,previousCoordinate.y).enPassent)pieces[newCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
-                if(!isCloned)foreach(Piece p in pieces)p.enPassent=false;
-                if((piece.getName()  == "white_king" && getPiece(newCoordinate).getName() == "white_rook")||
-                (piece.getName()  == "black_king" && getPiece(newCoordinate).getName() == "black_rook"))  {
-                    castle(piece, newCoordinate);
-                } else {  
-                    if(pieces[newCoordinate.x,newCoordinate.y].getName() != "null" )   {
-                       //  Debug.Log(pieces[newCoordinate.x,newCoordinate.y].getName() + " was eaten");
-                        if(pieces[newCoordinate.x,newCoordinate.y].getColor() == "white" )
-                            whiteEatenPieces.AddLast(pieces[newCoordinate.x,newCoordinate.y]);
-                        if(pieces[newCoordinate.x,newCoordinate.y].getColor() == "black" )
-                            blackEatenPieces.AddLast(pieces[newCoordinate.x,newCoordinate.y]);
-                    }  
-                    pieces[previousCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
-                    pieces[newCoordinate.x,newCoordinate.y] = new Piece(piece.getName(),newCoordinate.x,newCoordinate.y);
-                    pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
-                    
-                    if(piece.getName().Split("_")[1] == "pawn" && previousCoordinate.distance(newCoordinate) >= 2)
-                        pieces[newCoordinate.x,newCoordinate.y].enPassent = true;  
+                if(RandomVariables.willMove(random,newAttacks(previousCoordinate,newCoordinate)-attackCount(getPiece(previousCoordinate)))||isCloned){
+                    if(piece.getName().Split("_")[1] == "pawn" && getPiece(newCoordinate.x,previousCoordinate.y).enPassent)pieces[newCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
+                    if(!isCloned)foreach(Piece p in pieces)p.enPassent=false;
+                    if((piece.getName()  == "white_king" && getPiece(newCoordinate).getName() == "white_rook")||
+                    (piece.getName()  == "black_king" && getPiece(newCoordinate).getName() == "black_rook"))  {
+                        castle(piece, newCoordinate);
+                    } else {  
+                        if(pieces[newCoordinate.x,newCoordinate.y].getName() != "null" )   {
+                        //  Debug.Log(pieces[newCoordinate.x,newCoordinate.y].getName() + " was eaten");
+                            if(pieces[newCoordinate.x,newCoordinate.y].getColor() == "white" )
+                                whiteEatenPieces.AddLast(pieces[newCoordinate.x,newCoordinate.y]);
+                            if(pieces[newCoordinate.x,newCoordinate.y].getColor() == "black" )
+                                blackEatenPieces.AddLast(pieces[newCoordinate.x,newCoordinate.y]);
+                        }  
+                        pieces[previousCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
+                        pieces[newCoordinate.x,newCoordinate.y] = new Piece(piece.getName(),newCoordinate.x,newCoordinate.y);
+                        pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
+                        
+                        if(piece.getName().Split("_")[1] == "pawn" && previousCoordinate.distance(newCoordinate) >= 2)
+                            pieces[newCoordinate.x,newCoordinate.y].enPassent = true;  
 
-                    if(piece.getName().Split("_")[1] =="pawn" && (newCoordinate.y == 7 || newCoordinate.y ==0 )){
-                         pieces[previousCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
-                         pieces[newCoordinate.x,newCoordinate.y] = new Piece(piece.getName().Split("_")[0] +"_" +RandomVariables.vaPromocao(random),newCoordinate.x,newCoordinate.y);
-                         pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
-                     }  
-                    switchTurn();
-                    if(!isCloned){
-                        winner = checkWinner(turn);
+                        if(piece.getName().Split("_")[1] =="pawn" && (newCoordinate.y == 7 || newCoordinate.y ==0 )){
+                            pieces[previousCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
+                            pieces[newCoordinate.x,newCoordinate.y] = new Piece(piece.getName().Split("_")[0] +"_" +RandomVariables.vaPromocao(random),newCoordinate.x,newCoordinate.y);
+                            pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
+                        }  
+                        switchTurn();
+                        if(!isCloned){
+                            winner = checkWinner(turn);
+                        }
                     }
                 }
             }
-            if(vsAi&& turn=="black" && winner=="null")
-                aiMove();
         }
 
         public void aiMove(){
@@ -283,6 +283,22 @@ public bool willCheck(Coordinates previousCoordinate, Coordinates newCoordinate)
     return false;
 }
 
+public int newAttacks(Coordinates previousCoordinate, Coordinates newCoordinate){
+    if(!isCloned){  
+        Board newBoard = (Board)this.Clone();
+        newBoard.move(previousCoordinate,newCoordinate);
+        for(int x= 0 ; x< 8; x++){
+            for(int y= 0 ; y< 8; y++){
+                if((newBoard.getPiece(x,y).getName() == "white_king"||newBoard.getPiece(x,y).getName() == "black_king") && newBoard.getPiece(x,y).getColor() == turn){
+                    newBoard.turn = turn;
+                    newBoard.attackCount(newBoard.getPiece(x,y));
+                }
+            }
+        }
+    }
+    return 0;
+}
+
 
 public bool isCheck (Piece piece){
     List<Coordinates> validMoves = new List<Coordinates>();
@@ -302,6 +318,27 @@ public bool isCheck (Piece piece){
         }
     }
     return false;
+}
+
+public int attackCount (Piece piece){
+    List<Coordinates> validMoves = new List<Coordinates>();
+    Coordinates piecePosition = piece.coordinates;
+    int k = 0;
+    for(int x=0; x<8; x++){
+        for(int y=0; y<8; y++){
+            if(!(getPiece(x,y).equals(piece))){
+                isCloned = true;
+                if(getPiece(x,y).getName() != "null")validMoves = movePlate(getPiece(x,y),true);
+                isCloned=false;
+                foreach(Coordinates c in validMoves){
+                    if(c.x== piecePosition.x && c.y== piecePosition.y){
+                        k++;
+                    }
+                }
+            }
+        }
+    }
+    return k;
 }
 
 public string checkWinner(string color){
@@ -371,10 +408,10 @@ public string checkWinner(string color){
         if(whiteEatenPieces.Count >=3){
             (Piece, Coordinates) piece = RandomVariables.vaRevive(whiteEatenPieces);
             Debug.Log(piece.Item1.getName() + " "+ piece.Item2.x + " "+ piece.Item2.y);
-                        pieces[piece.Item2.x,piece.Item2.y] = new Piece(piece.Item1.getName(),
-                        piece.Item2.x,piece.Item2.y);
-                      //  Debug.Log(piece.Item1 + " "+ piece.Item2.x + " "+ piece.Item2.y);
-                    Piece pieceToRemove= null;  
+            pieces[piece.Item2.x,piece.Item2.y] = new Piece(piece.Item1.getName(),
+            piece.Item2.x,piece.Item2.y);
+            //Debug.Log(piece.Item1 + " "+ piece.Item2.x + " "+ piece.Item2.y);
+            
         }
     }
 

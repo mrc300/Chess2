@@ -53,7 +53,11 @@ public class Game : MonoBehaviour
         if(board.turn == "black"){
             blackTimer.run();
         }
-        if(board.getWinner() == "null" && blackTimer.running == true && whiteTimer.running == true ){
+        if(board.getWinner() == "null" && whiteTimer.running == true && blackTimer.running == true ){
+            if(board.vsAi&& board.turn=="black"){
+                board.aiMove();
+                refresh();
+            }
             if(Input.GetMouseButtonDown(0)) {
                 var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 mouseWorldPos.z = 0f; // zero z
@@ -145,9 +149,7 @@ public class Game : MonoBehaviour
 }
 
 
-    void movePiece(Coordinates previousCoordinate,Coordinates newCoordinate, Piece Piece){
-        board.move(previousCoordinate,newCoordinate);
-        removePieces();
+    void placePieces(){
         for(int x=0; x<8; x++){
             for(int y=0; y<8; y++){
                 GameObject cur = getSprite(board.getPiece(x,y).getName());
@@ -157,7 +159,10 @@ public class Game : MonoBehaviour
                 }
             }
         }
-
+    }
+    void movePiece(Coordinates previousCoordinate,Coordinates newCoordinate, Piece Piece){
+        board.move(previousCoordinate,newCoordinate);
+        refresh();
     }
 
 
@@ -208,10 +213,17 @@ void removePieces()
     }
 }
 
+void refresh(){
+    removePieces();
+    placePieces();
+}
+
 
 public void reviveOnclick(){
     board.Revive();
     whiteReviveButton.SetActive(false);
+    board.switchTurn();
+    refresh();
 }
 
 }
