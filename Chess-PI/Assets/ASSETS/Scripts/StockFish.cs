@@ -12,7 +12,8 @@ public class StockFish
     private static int lineCount = 0;
     private static StringBuilder output = new StringBuilder();
     public StockFish(){
-        string stockfishPath = Application.dataPath + @"/ASSETS/Scripts/stockfish/stockfish-windows-x86-64-modern.exe";
+        //string stockfishPath = Application.dataPath + @"/ASSETS/Scripts/stockfish/stockfish-windows-x86-64-modern.exe";
+        string stockfishPath = Application.dataPath + @"/stockfish/stockfish-windows-x86-64-modern.exe";
         stockfishProcess = new Process();
         stockfishProcess.StartInfo.FileName = stockfishPath;
         stockfishProcess.StartInfo.UseShellExecute = false;

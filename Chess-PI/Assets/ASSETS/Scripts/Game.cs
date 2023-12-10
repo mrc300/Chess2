@@ -31,7 +31,7 @@ public class Game : MonoBehaviour
         multiplayer = mainMenu.multiplayer;
         board = new Board(multiplayer);
         createBoard();
-        stockFish = new StockFish();
+        if(multiplayer)stockFish = new StockFish();
         whiteTimer= new Timer(whiteTimerText);
         blackTimer= new Timer(blackTimerText);
         float minutes = mainMenu.input;   //em minutos!!!
@@ -43,7 +43,6 @@ public class Game : MonoBehaviour
         blackTimer.setTimerText();
         whiteReviveButton.SetActive(false);
         blackReviveButton.SetActive(false);
-
     }
 
     void Update(){
