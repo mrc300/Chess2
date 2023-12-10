@@ -22,7 +22,7 @@ public class Game : MonoBehaviour
     private Vector3 iBoard = new Vector3(-31.53f,-31.53f,0);
     private bool whiteRevive = false;
     private bool blackRevive = false;
-    private Piece previousPiece;
+    private Piece previousPiece = null;
     private StockFish stockFish;
     private List<Coordinates> previousValidMoves = new List<Coordinates>();
     private Vector3 previousUnityCoords;
@@ -63,7 +63,6 @@ public class Game : MonoBehaviour
         }
         if(board.getWinner() == "null" && whiteTimer.running == true && blackTimer.running == true ){
             if(board.vsAi&& board.turn=="black"){
-                Debug.Log("Hello");
                 board.aiMove();
                 refresh();
             }
@@ -76,7 +75,6 @@ public class Game : MonoBehaviour
                     Piece clickedPiece = board.getPiece(offsetWorldPos.x, offsetWorldPos.y);
                     if(clickedPiece.getName() != "null" || previousPiece != null){
                         if (previousPiece != null){
-                            Debug.Log(previousPiece);
                             removeMovePlates();
                             if(offsetWorldPos.inVector(previousValidMoves)){
                                 if(board.turn == "white")

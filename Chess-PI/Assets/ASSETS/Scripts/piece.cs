@@ -36,6 +36,10 @@ public class Piece
         }
     }
 
+    public Coordinates getCoordinates(){
+        return coordinates;
+    }
+
     public string getName(){
        return name;
     } 

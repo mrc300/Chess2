@@ -38,7 +38,6 @@ public class Board {
         
          public Board(bool vsAi){
             if(vsAi)stockFish = new StockFish();
-            Debug.Log("hello");
             this.isCloned=false;
             this.vsAi = vsAi;
             for(int x=0; x<8; x++){
@@ -296,14 +295,8 @@ public int newAttacks(Coordinates previousCoordinate, Coordinates newCoordinate)
     if(!isCloned){  
         Board newBoard = (Board)this.Clone();
         newBoard.move(previousCoordinate,newCoordinate);
-        for(int x= 0 ; x< 8; x++){
-            for(int y= 0 ; y< 8; y++){
-                if((newBoard.getPiece(x,y).getName() == "white_king"||newBoard.getPiece(x,y).getName() == "black_king") && newBoard.getPiece(x,y).getColor() == turn){
-                    newBoard.turn = turn;
-                    newBoard.attackCount(newBoard.getPiece(x,y));
-                }
-            }
-        }
+        newBoard.turn = turn;
+        return newBoard.attackCount(newBoard.getPiece(newCoordinate));
     }
     return 0;
 }
@@ -340,9 +333,10 @@ public int attackCount (Piece piece){
                 bool cloned = isCloned;
                 isCloned = true;
                 if(getPiece(x,y).getName() != "null")validMoves = movePlate(getPiece(x,y),true);
+                else validMoves = new List<Coordinates>();
                 isCloned = cloned;
                 foreach(Coordinates c in validMoves){
-                    if(c.x== piecePosition.x && c.y== piecePosition.y){
+                    if(c.x== piecePosition.x && c.y== piecePosition.y && piece.getColor() != getPiece(x,y).getColor()){
                         k++;
                     }
                 }
@@ -416,7 +410,7 @@ public string checkWinner(string color){
     }
 
     public void whiteRevive(){
-        (Piece, Coordinates) piece = RandomVariables.vaRevive(whiteEatenPieces);
+        (Piece, Coordinates) piece = RandomVariables.vaRevive(whiteEatenPieces,this);
         Debug.Log(piece.Item1.getName() + " " + piece.Item2.x + " " + piece.Item2.y);
         if(getPiece(piece.Item2.x, piece.Item2.y).getName()== "black_king"){
             whiteRevive();
@@ -429,7 +423,7 @@ public string checkWinner(string color){
 
 
    public void blackRevive(){
-        (Piece, Coordinates) piece = RandomVariables.vaRevive(blackEatenPieces);
+        (Piece, Coordinates) piece = RandomVariables.vaRevive(blackEatenPieces,this);
         Debug.Log(piece.Item1.getName() + " " + piece.Item2.x + " " + piece.Item2.y);
         if(getPiece(piece.Item2.x, piece.Item2.y).getName()== "white_king"){
             blackRevive();
