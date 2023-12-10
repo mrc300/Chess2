@@ -144,9 +144,9 @@ public class Board {
                         .Concat(Moves.moveLine(this,p,-1,-2,1)).ToList();
                 }
             }
-            /*if(winner == "null" && ((p.getColor() != turn && p.getColor() !=null) || bothColors)){
+            if(winner == "null" && !isCheck(getKing(turn)) &&((p.getColor() != turn && p.getColor() !=null) || bothColors)){
                 return new List<Coordinates>(){p.coordinates};
-            }*/
+            }
             return new List<Coordinates>();
         
         }
@@ -180,12 +180,11 @@ public class Board {
                             pieces[previousCoordinate.x,previousCoordinate.y] = new Piece(previousCoordinate.x,previousCoordinate.y);
                             pieces[newCoordinate.x,newCoordinate.y] = new Piece(piece.getName().Split("_")[0] +"_" +RandomVariables.vaPromocao(random),newCoordinate.x,newCoordinate.y);
                             pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
-                        }  
-                        
+                        }
                     }
                 }
             }
-            if(piece.getColor() != turn && piece.getColor() !=null){
+            if(piece.getColor() != turn && piece.getColor() !=null && RandomVariables.convertPiece(random,piece)){
                 piece.switchColor();
             }
             switchTurn();
