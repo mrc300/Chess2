@@ -23,6 +23,19 @@ public class Piece
         enPassent=false;
         hasMoved=false;
     }
+
+    public void switchColor(){
+        if(name.Split("_")[1] != "king"){
+            if(color=="black"){
+                this.name = "white_"+name.Split("_")[1];
+                this.color="white";
+            } else if(color == "white"){
+                this.name = "black_"+name.Split("_")[1];
+                this.color = "black";
+            }
+        }
+    }
+
     public string getName(){
        return name;
     } 

@@ -74,7 +74,7 @@ public class Game : MonoBehaviour
                     //Debug.Log($"{(int)(offsetWorldPos.x)} , {(int)(offsetWorldPos.y)}");
                     Piece clickedPiece = board.getPiece(offsetWorldPos.x, offsetWorldPos.y);
                     if(clickedPiece.getName() != "null" || previousPiece != null){
-                        if (previousPiece != null && !(previousPiece.equals(clickedPiece))){
+                        if (previousPiece != null){
                             removeMovePlates();
                             if(offsetWorldPos.inVector(previousValidMoves)){
                                 if(board.turn == "white")

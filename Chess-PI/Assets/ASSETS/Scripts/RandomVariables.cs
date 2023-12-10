@@ -17,7 +17,6 @@ public static class RandomVariables{
         double probRainha = 0.5;
         double probTorre = 0.3;
         double probCavalo = 0.1;
-        double probBispo = 0.1;
         double escolha = random.NextDouble();
         if (escolha < probRainha)
             return "queen";

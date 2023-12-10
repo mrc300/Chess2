@@ -22,7 +22,6 @@ public class Board {
         private StockFish stockFish;
         public string turn= "white";
         System.Random random = new System.Random();
-        LinkedList<Piece> eatenPieces = new LinkedList<Piece>();
        public LinkedList<Piece> whiteEatenPieces = new LinkedList<Piece>();
        public LinkedList<Piece> blackEatenPieces = new LinkedList<Piece>();
 
@@ -144,6 +143,9 @@ public class Board {
                         .Concat(Moves.moveLine(this,p,-1,-2,1)).ToList();
                 }
             }
+            /*if(winner == "null" && ((p.getColor() != turn && p.getColor() !=null) || bothColors)){
+                return new List<Coordinates>(){p.coordinates};
+            }*/
             return new List<Coordinates>();
         
         }
@@ -178,12 +180,16 @@ public class Board {
                             pieces[newCoordinate.x,newCoordinate.y] = new Piece(piece.getName().Split("_")[0] +"_" +RandomVariables.vaPromocao(random),newCoordinate.x,newCoordinate.y);
                             pieces[newCoordinate.x,newCoordinate.y].hasMoved = true;
                         }  
-                        switchTurn();
-                        if(!isCloned){
-                            winner = checkWinner(turn);
-                        }
+                        
                     }
                 }
+            }
+            if(piece.getColor() != turn && piece.getColor() !=null){
+                piece.switchColor();
+            }
+            switchTurn();
+            if(!isCloned){
+                winner = checkWinner(turn);
             }
         }
 
@@ -427,12 +433,6 @@ public string checkWinner(string color){
         turn = "white";
         }
 
-}
-
-
-
-
-
-
+    }
 }    
 
