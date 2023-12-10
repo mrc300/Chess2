@@ -17,8 +17,8 @@ public class Game : MonoBehaviour
     public TextMeshProUGUI blackTimerText;
     private Timer whiteTimer,blackTimer;
 
-    public static bool multiplayer = mainMenu.multiplayer;
-    public Board board = new Board(multiplayer);
+    public static bool multiplayer;
+    public Board board;
     private Vector3 iBoard = new Vector3(-31.53f,-31.53f,0);
     private bool whiteRevive = false;
     private bool blackRevive = false;
@@ -28,6 +28,8 @@ public class Game : MonoBehaviour
     private Vector3 previousUnityCoords;
     void Start()
     {   
+        multiplayer = mainMenu.multiplayer;
+        board = new Board(multiplayer);
         createBoard();
         stockFish = new StockFish();
         whiteTimer= new Timer(whiteTimerText);

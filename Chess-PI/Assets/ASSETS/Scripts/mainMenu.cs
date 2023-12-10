@@ -12,11 +12,11 @@ public class mainMenu : MonoBehaviour
     public static float input;
     public static bool multiplayer;
     public void play(){
-        SceneManager.LoadSceneAsync(1);
+        SceneManager.LoadScene(1);
     }
 
     public void menu(){
-        SceneManager.LoadSceneAsync(0);
+        SceneManager.LoadScene(0);
     }
     public void quit(){
         Application.Quit();
@@ -45,5 +45,8 @@ public class mainMenu : MonoBehaviour
         play();
     }
 
+    public void resetMultiPlayer(){
+        multiplayer = false;
+    }
 
 }
