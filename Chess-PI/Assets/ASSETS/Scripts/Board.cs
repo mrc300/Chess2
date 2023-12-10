@@ -16,7 +16,7 @@ public class Board {
 
 
         private Piece [,] pieces = new Piece[8,8];
-        private bool isCloned = false;
+        private bool isCloned;
         public bool vsAi;
         private string winner = "null";
         private StockFish stockFish;
@@ -38,6 +38,8 @@ public class Board {
         
          public Board(bool vsAi){
             if(vsAi)stockFish = new StockFish();
+            Debug.Log("hello");
+            this.isCloned=false;
             this.vsAi = vsAi;
             for(int x=0; x<8; x++){
                 for(int y=0; y<8; y++){
@@ -101,45 +103,45 @@ public class Board {
                 }
                 if(p.getName() == "white_bishop" || p.getName() == "black_bishop"){
                     return Moves.moveLine(this,p,1,1,7)
-                        .Concat(Moves.moveLine(this,p,1,-1,7)).ToList()
-                        .Concat(Moves.moveLine(this,p,-1,1,7)).ToList()
+                        .Concat(Moves.moveLine(this,p,1,-1,7))
+                        .Concat(Moves.moveLine(this,p,-1,1,7))
                         .Concat(Moves.moveLine(this,p,-1,-1,7)).ToList();
                 }
                 if(p.getName() == "white_rook" || p.getName() == "black_rook"){
                     return Moves.moveLine(this,p,1,0,7)
-                        .Concat(Moves.moveLine(this,p,0,-1,7)).ToList()
-                        .Concat(Moves.moveLine(this,p,-0,1,7)).ToList()
+                        .Concat(Moves.moveLine(this,p,0,-1,7))
+                        .Concat(Moves.moveLine(this,p,-0,1,7))
                         .Concat(Moves.moveLine(this,p,-1,0,7)).ToList();
                 }
                 if(p.getName() == "white_queen" || p.getName() == "black_queen"){
                     return Moves.moveLine(this,p,1,0,7)
-                        .Concat(Moves.moveLine(this,p,0,-1,7)).ToList()
-                        .Concat(Moves.moveLine(this,p,-0,1,7)).ToList()
-                        .Concat(Moves.moveLine(this,p,-1,0,7)).ToList()
-                        .Concat(Moves.moveLine(this,p,1,1,7)).ToList()
-                        .Concat(Moves.moveLine(this,p,1,-1,7)).ToList()
-                        .Concat(Moves.moveLine(this,p,-1,1,7)).ToList()
+                        .Concat(Moves.moveLine(this,p,0,-1,7))
+                        .Concat(Moves.moveLine(this,p,-0,1,7))
+                        .Concat(Moves.moveLine(this,p,-1,0,7))
+                        .Concat(Moves.moveLine(this,p,1,1,7))
+                        .Concat(Moves.moveLine(this,p,1,-1,7))
+                        .Concat(Moves.moveLine(this,p,-1,1,7))
                         .Concat(Moves.moveLine(this,p,-1,-1,7)).ToList();
                 }
                 if(p.getName() == "white_king" || p.getName() == "black_king"){
                     return Moves.moveLine(this,p,1,0,1)
-                        .Concat(Moves.moveLine(this,p,0,-1,1)).ToList()
-                        .Concat(Moves.moveLine(this,p,-0,1,1)).ToList()
-                        .Concat(Moves.moveLine(this,p,-1,0,1)).ToList()
-                        .Concat(Moves.moveLine(this,p,1,1,1)).ToList()
-                        .Concat(Moves.moveLine(this,p,1,-1,1)).ToList()
-                        .Concat(Moves.moveLine(this,p,-1,1,1)).ToList()
+                        .Concat(Moves.moveLine(this,p,0,-1,1))
+                        .Concat(Moves.moveLine(this,p,-0,1,1))
+                        .Concat(Moves.moveLine(this,p,-1,0,1))
+                        .Concat(Moves.moveLine(this,p,1,1,1))
+                        .Concat(Moves.moveLine(this,p,1,-1,1))
+                        .Concat(Moves.moveLine(this,p,-1,1,1))
                         .Concat(Moves.moveLine(this,p,-1,-1,1)).ToList()
                         .Concat(Moves.castle(this,p)).ToList();
                 }
                 if(p.getName()=="white_night"|| p.getName()=="black_night"){
                     return Moves.moveLine(this,p,2,1,1)
-                        .Concat(Moves.moveLine(this,p,2,-1,1)).ToList()
-                        .Concat(Moves.moveLine(this,p,-2,1,1)).ToList()
-                        .Concat(Moves.moveLine(this,p,-2,-1,1)).ToList()
-                        .Concat(Moves.moveLine(this,p,1,2,1)).ToList()
-                        .Concat(Moves.moveLine(this,p,-1,2,1)).ToList()
-                        .Concat(Moves.moveLine(this,p,1,-2,1)).ToList()
+                        .Concat(Moves.moveLine(this,p,2,-1,1))
+                        .Concat(Moves.moveLine(this,p,-2,1,1))
+                        .Concat(Moves.moveLine(this,p,-2,-1,1))
+                        .Concat(Moves.moveLine(this,p,1,2,1))
+                        .Concat(Moves.moveLine(this,p,-1,2,1))
+                        .Concat(Moves.moveLine(this,p,1,-2,1))
                         .Concat(Moves.moveLine(this,p,-1,-2,1)).ToList();
                 }
             }
@@ -189,6 +191,7 @@ public class Board {
             }
             switchTurn();
             if(!isCloned){
+                //Debug.Log(isCloned);
                 winner = checkWinner(turn);
             }
         }
@@ -312,9 +315,10 @@ public bool isCheck (Piece piece){
     for(int x=0; x<8; x++){
         for(int y=0; y<8; y++){
             if(!(getPiece(x,y).equals(piece))){
+                bool cloned = isCloned;
                 isCloned = true;
                 if(getPiece(x,y).getName() != "null")validMoves = movePlate(getPiece(x,y),true);
-                isCloned=false;
+                isCloned = cloned;
                 foreach(Coordinates c in validMoves){
                     if(c.x== piecePosition.x && c.y== piecePosition.y){
                         return true;
@@ -333,9 +337,10 @@ public int attackCount (Piece piece){
     for(int x=0; x<8; x++){
         for(int y=0; y<8; y++){
             if(!(getPiece(x,y).equals(piece))){
+                bool cloned = isCloned;
                 isCloned = true;
                 if(getPiece(x,y).getName() != "null")validMoves = movePlate(getPiece(x,y),true);
-                isCloned=false;
+                isCloned = cloned;
                 foreach(Coordinates c in validMoves){
                     if(c.x== piecePosition.x && c.y== piecePosition.y){
                         k++;
