@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEngine;
 
 
 public static class RandomVariables{
-    public static double randomNormal(System.Random random ,double mean,double sd, double min, double max) {
+    public static double randomNormal(Random random ,double mean,double sd, double min, double max) {
         double u1 = random.NextDouble();
         double u2 = random.NextDouble();
         double res = mean+(sd *Math.Sqrt(-2*Math.Log(u1))*Math.Cos(2*Math.PI * u2));
@@ -13,7 +12,7 @@ public static class RandomVariables{
         return res;
     }
     
-    public static string vaPromocao(System.Random random)
+    public static string vaPromocao(Random random)
     {
         double probRainha = 0.5;
         double probTorre = 0.3;
@@ -29,10 +28,9 @@ public static class RandomVariables{
             return "bishop";
     }
 
-    public static bool willMove(System.Random random,int numAttackers){
+    public static bool willMove(Random random,int numAttackers){
         double prob = 2/(numAttackers+1.01);
         double res = random.NextDouble();
-        UnityEngine.Debug.Log(prob + " " + res + " " + numAttackers);
         return res<prob || prob<0;
     }
 
@@ -42,7 +40,7 @@ public static class RandomVariables{
         throw new InvalidOperationException("The list is empty.");
     }
 
-    System.Random random = new System.Random();
+    Random random = new Random();
     int randomIndex = random.Next(0, eatenPieces.Count);
 
     LinkedListNode<Piece> currentNode = eatenPieces.First;
@@ -64,32 +62,32 @@ public static class RandomVariables{
             if(board.getPiece(x,y).getName() == "null")empty.Add(board.getPiece(x,y));
         }
     }
-    System.Random random = new System.Random();
+    Random random = new Random();
     Coordinates posicao = empty[random.Next(empty.Count-1)].getCoordinates();
 
     return (selectedPiece, posicao);
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public static bool convertPiece(Random random,Piece piece){
+        double prob = 0.0;
+        switch(piece.getName().Split("_")[1]){
+            case "queen":
+                prob = 0.1;
+                break;
+            case "rook":
+                prob = 0.2;
+                break;
+            case "night":
+                prob = 0.3;
+                break;
+            case "bishop":
+                prob = 0.3;
+                break;
+            case "pawn":
+                prob = 0.4;
+                break;
+        }
+        return random.NextDouble() < prob;
+    }
 }
