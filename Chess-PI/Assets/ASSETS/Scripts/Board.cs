@@ -10,6 +10,8 @@ using static Moves;
 using static Coordinates;
 using UnityEngine.UIElements;
 using static RandomVariables;
+using System.Threading;
+
 public class Board {
         
 
@@ -195,6 +197,7 @@ public class Board {
         }
 
         public void aiMove(){
+            Thread.Sleep(500);
             string[] eval = stockFish.getBestMove(this.toFen()).Split("\n");
             string bestmove = eval[eval.Length-1];
             string aimove = bestmove.Split(" ")[2];
@@ -414,23 +417,26 @@ public string checkWinner(string color){
         if(getPiece(piece.Item2.x, piece.Item2.y).getName()== "black_king"){
             whiteRevive();
         }else{
-        pieces[piece.Item2.x, piece.Item2.y] = new Piece(piece.Item1.getName(), piece.Item2.x, piece.Item2.y);
-        turn = "black";
+            pieces[piece.Item2.x, piece.Item2.y] = new Piece(piece.Item1.getName(), piece.Item2.x, piece.Item2.y);
+            turn = "black";
         }
+        
+        
 }
 
 
 
    public void blackRevive(){
+        
         (Piece, Coordinates) piece = RandomVariables.vaRevive(blackEatenPieces,this);
         Debug.Log(piece.Item1.getName() + " " + piece.Item2.x + " " + piece.Item2.y);
         if(getPiece(piece.Item2.x, piece.Item2.y).getName()== "white_king"){
             blackRevive();
         }else{
-        pieces[piece.Item2.x, piece.Item2.y] = new Piece(piece.Item1.getName(), piece.Item2.x, piece.Item2.y);
-        turn = "white";
+            pieces[piece.Item2.x, piece.Item2.y] = new Piece(piece.Item1.getName(), piece.Item2.x, piece.Item2.y);
+            turn = "white";
         }
-
+        
     }
 }    
 

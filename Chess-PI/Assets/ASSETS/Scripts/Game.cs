@@ -51,7 +51,7 @@ public class Game : MonoBehaviour
         whiteReviveButton.SetActive(true);
         whiteRevive = true;
         }
-        if(board.blackEatenPieces.Count >=3 && blackRevive == false  ){
+        if(board.blackEatenPieces.Count >=3 && blackRevive == false && !multiplayer ){
         blackReviveButton.SetActive(true);
         blackRevive = true;
         }
@@ -230,7 +230,7 @@ void refresh(){
 
 
 public void whiteReviveOnclick(){
-    if(board.turn == "white"){
+    if(board.turn == "white" && !board.isCheck(board.getKing("white"))){
         board.whiteRevive();
         whiteReviveButton.SetActive(false);
     removePieces();
@@ -246,7 +246,7 @@ public void whiteReviveOnclick(){
         }
     }
     public void blackReviveOnclick(){
-        if(board.turn== "black"){
+        if(board.turn== "black" && !board.isCheck(board.getKing("black"))){
         board.blackRevive();
         blackReviveButton.SetActive(false);
         removePieces();
